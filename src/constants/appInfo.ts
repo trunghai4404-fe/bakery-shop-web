@@ -1,0 +1,8 @@
+
+const appImages = {
+
+}
+
+export {
+    appImages
+};

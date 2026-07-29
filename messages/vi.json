@@ -1,0 +1,8 @@
+{
+  "NotFound": {
+    "title": "Không tìm thấy trang",
+    "description": "Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển. Vui lòng quay lại Trang chủ.",
+    "backHome": "Về Trang Chủ",
+    "back": "Quay Lại"
+  }
+}
