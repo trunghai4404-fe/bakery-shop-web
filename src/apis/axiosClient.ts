@@ -52,9 +52,9 @@ axiosClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const { response } = error;
-    if (response?.status === 401) {
-      return Promise.reject(response.data);
-    }
+    // if (response?.status === 401) {
+    //   return Promise.reject(response.data);
+    // }
 
     if (response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {

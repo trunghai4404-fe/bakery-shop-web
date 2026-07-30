@@ -4,5 +4,23 @@
     "description": "The page you are looking for does not exist or has been moved. Please return to the Home page.",
     "backHome": "Back to Home",
     "back": "Go Back"
+  },
+  "Header": {
+    "introduce": "Introduce",
+    "contact": "Contact",
+    "news": "News",
+    "goToApp": "Find a court",
+    "search": "Search...",
+    "searchPlaceholder": "Search courts, sports, locations...",
+    "notifications": "Notifications",
+    "noNotifications": "No new notifications",
+    "viewAll": "View all",
+    "favorites": "Favorites",
+    "profile": "Profile",
+    "bookings": "My Bookings",
+    "settings": "Settings",
+    "logout": "Log out",
+    "recentSearches": "Recent searches",
+    "popularSearches": "Popular searches"
   }
 }

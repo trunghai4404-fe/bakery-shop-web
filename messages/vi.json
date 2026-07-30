@@ -4,5 +4,23 @@
     "description": "Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển. Vui lòng quay lại Trang chủ.",
     "backHome": "Về Trang Chủ",
     "back": "Quay Lại"
+  },
+  "Header": {
+    "introduce": "Giới thiệu",
+    "contact": "Liên hệ",
+    "news": "Tin tức",
+    "goToApp": "Tìm sân ngay",
+    "search": "Tìm kiếm...",
+    "searchPlaceholder": "Tìm kiếm sân, môn thể thao, địa điểm...",
+    "notifications": "Thông báo",
+    "noNotifications": "Không có thông báo mới",
+    "viewAll": "Xem tất cả",
+    "favorites": "Yêu thích",
+    "profile": "Thông tin cá nhân",
+    "bookings": "Lịch đặt của tôi",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất",
+    "recentSearches": "Tìm kiếm gần đây",
+    "popularSearches": "Tìm kiếm phổ biến"
   }
 }

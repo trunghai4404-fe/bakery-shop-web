@@ -21,7 +21,7 @@ export const createAxiosServerSide = () => {
 
   instance.interceptors.response.use(
     (res) => {
-      if(res.data && res.status >= 200 && res.status <= 200) {
+      if (res.data && res.status >= 200 && res.status <= 300) {
         return res.data;
       } else {
         return Promise.reject(res.data);

@@ -6,6 +6,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { LoadingProvider } from "@/context/LoadingContext";
+import NextTopLoader from 'nextjs-toploader'
 
 export const metadata: Metadata = {
   title: {
@@ -75,7 +77,18 @@ export default async function LocaleLayout({
     >
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={messages}>
-          <Providers>{children}</Providers>
+          <LoadingProvider>
+            <NextTopLoader
+              color="linear-gradient(to right, #9d4300, #f97316, #adc6ff, #f97316, #9d4300)"
+              height={3}
+              showSpinner={true}
+              crawl={true}
+              speed={250}
+              easing="ease"
+              shadow="0 0 10px #f97316, 0 0 5px #9d4300"
+            />
+            <Providers>{children}</Providers>
+          </LoadingProvider>
         </NextIntlClientProvider>
       </body>
     </html>
