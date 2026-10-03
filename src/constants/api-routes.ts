@@ -4,7 +4,7 @@ const API = '/api/v1'
 const BASE_URL = `${API_URL + API}`
 
 export const ApiRouters = {
-    SEND_OTP: `${BASE_URL}/auth/send-otp`,
-    VERIFY_OTP: `${BASE_URL}/auth/verify-otp`,
-    REGISTER: `${BASE_URL}/auth/register`,
+    AUTH: `${BASE_URL}/auth`,
+    ME: `${BASE_URL}/users/me`,
+    UPDATE_PROFILE: `${BASE_URL}/users/me`,
 }

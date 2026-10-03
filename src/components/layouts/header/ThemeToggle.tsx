@@ -28,7 +28,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="flex h-8 w-8 border border-primary/50 items-center justify-center rounded-lg dark:border-primary/20 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 cursor-pointer"
+      className="flex h-8 w-8 border border-primary/50 items-center justify-center rounded-lg dark:border-primary/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 cursor-pointer"
       aria-label="Toggle theme"
     >
       {isDark ? <Sun className="h-4 w-4 stroke-[1.5] text-primary" /> : <Moon className="h-4 w-4 stroke-[1.5] text-primary" />}

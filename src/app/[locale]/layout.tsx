@@ -8,6 +8,9 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { LoadingProvider } from "@/context/LoadingContext";
 import NextTopLoader from 'nextjs-toploader'
+import { Toaster } from "@/components/ui/toast";
+import { AuthModalProvider } from "@/components/auths/AuthModalProvider";
+import { ToastProvider } from "@/components/toast/ToastProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -87,7 +90,12 @@ export default async function LocaleLayout({
               easing="ease"
               shadow="0 0 10px #f97316, 0 0 5px #9d4300"
             />
-            <Providers>{children}</Providers>
+            <Providers>
+              <AuthModalProvider>
+                {children}
+              </AuthModalProvider>
+              <ToastProvider />
+            </Providers>
           </LoadingProvider>
         </NextIntlClientProvider>
       </body>

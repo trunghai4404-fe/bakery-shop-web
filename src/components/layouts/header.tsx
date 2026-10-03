@@ -38,7 +38,9 @@ export default function Header() {
         profile: t('profile'),
         bookings: t('bookings'),
         settings: t('settings'),
-        logout: t('logout')
+        logout: t('logout'),
+        login: t('login'),
+        register: t('register')
     }
 
     return (

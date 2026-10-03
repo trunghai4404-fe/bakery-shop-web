@@ -14,7 +14,7 @@ export default async function Home() {
 
           <h1 className="text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-zinc-50 sm:text-6xl font-sans">
             Sân chơi đẳng cấp <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-container">
+            <span className="bg-clip-text text-transparent bg-linear-to-r from-primary to-primary-container">
               Chỉ với vài click
             </span>
           </h1>
