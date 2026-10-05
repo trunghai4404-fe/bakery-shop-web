@@ -1,6 +1,6 @@
 'use client'
 
-import Header from "@/components/layouts/header"
+import HeaderNavigationWrapper from "@/components/HeaderNavigationWrapper"
 import PageContainer from "@/components/layouts/page-container"
 
 export default function MainLayout({
@@ -10,11 +10,10 @@ export default function MainLayout({
 }) {
     return (
         <div className="min-h-screen flex flex-col">
-            <Header />
             <main className="w-full flex-1">
-                <PageContainer>
-                    {children}
-                </PageContainer>
+                <HeaderNavigationWrapper>
+                    <PageContainer>{children}</PageContainer>
+                </HeaderNavigationWrapper>
             </main>
         </div>
     )

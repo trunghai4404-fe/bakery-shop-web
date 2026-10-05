@@ -21,7 +21,7 @@ export default function MobileMenuItem({
 }: MobileMenuItemProps) {
   const textClass = danger
     ? "text-destructive hover:bg-destructive/10"
-    : "text-zinc-700 dark:text-zinc-300 hover:text-primary hover:bg-zinc-50 dark:hover:bg-zinc-900"
+    : "text-zinc-700 hover:text-primary hover:bg-zinc-50"
 
   const content = (
     <>

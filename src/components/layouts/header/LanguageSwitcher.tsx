@@ -21,7 +21,7 @@ export default function LanguageSwitcher({
   const onChangeLanguage = (newLang: 'vi' | 'en') => {
     if (newLang === currentLang) return
 
-    Cookies.set(LOCALE_COOKIE, newLang)
+    Cookies.set(LOCALE_COOKIE, newLang, { expires: 365, path: '/' })
 
     const params = searchParams.toString()
     const targetPath = params ? `${pathname}?${params}` : pathname
@@ -30,7 +30,7 @@ export default function LanguageSwitcher({
   }
 
   return (
-    <div className="relative flex rounded-full border border-zinc-200/50 bg-zinc-100 p-0.5 dark:border-zinc-700/30 dark:bg-zinc-800">
+    <div className="relative flex rounded-full border border-zinc-200/50 bg-zinc-100 p-0.5">
       {currentLang === "vi" && (
         <motion.div
           layoutId="language-switcher"
@@ -59,7 +59,7 @@ export default function LanguageSwitcher({
         onClick={() => onChangeLanguage("vi")}
         className={`relative z-10 flex-1 cursor-pointer rounded-full px-2 py-0.5 text-[10px] font-extrabold transition-colors duration-200 ${currentLang === "vi"
           ? "text-white"
-          : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400"
+          : "text-zinc-500 hover:text-zinc-800"
           }`}
       >
         VI
@@ -69,7 +69,7 @@ export default function LanguageSwitcher({
         onClick={() => onChangeLanguage("en")}
         className={`relative z-10 flex-1 cursor-pointer rounded-full px-2 py-0.5 text-[10px] font-extrabold transition-colors duration-200 ${currentLang === "en"
           ? "text-white"
-          : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400"
+          : "text-zinc-500 hover:text-zinc-800"
           }`}
       >
         EN

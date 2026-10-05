@@ -6,6 +6,8 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from '../../redux/store/stores';
 
 function makeQueryClient() {
   return new QueryClient({
@@ -36,9 +38,11 @@ export default function Providers({ children }: ProvidersProps) {
   const queryClient = getQueryClient()
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <ReduxProvider store={store}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ReduxProvider>
   )
 }

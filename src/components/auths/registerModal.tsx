@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, X, User, Phone } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, X, User, Phone, Loader } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useForm, Controller } from "react-hook-form";
@@ -14,9 +14,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { appImages } from "@/constants/appInfo";
-import { useRegister } from "@/features/auths/hooks/useRegister";
 import { Separator } from "../ui/separator";
 import { RegisterSchema } from "@/components/auths/schema";
+import { useAppDispatch, useAppSelector } from "../../../redux/store/hooks";
+import { registerUser } from "../../../redux/store/slices/auth/auth.action";
 
 interface RegisterModalProps {
     isOpen: boolean;
@@ -28,6 +29,8 @@ export default function RegisterModal({ isOpen, onClose, onSwitchLogin }: Regist
     const t = useTranslations("Register");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const dispatch = useAppDispatch();
+    const loading = useAppSelector((state) => state.auth.loading);
 
     const registerSchema = RegisterSchema(t);
     type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -43,14 +46,9 @@ export default function RegisterModal({ isOpen, onClose, onSwitchLogin }: Regist
         defaultValues: {
             fullName: "",
             email: "",
-            phoneNumber: "",
             password: "",
             confirmPassword: "",
         },
-    });
-
-    const registerMutation = useRegister(() => {
-        onSwitchLogin?.();
     });
 
     useEffect(() => {
@@ -70,16 +68,11 @@ export default function RegisterModal({ isOpen, onClose, onSwitchLogin }: Regist
     }, [isOpen, onClose]);
 
     const onSubmit = (values: RegisterFormValues) => {
-        registerMutation.mutate({
-            fullName: values.fullName,
-            email: values.email,
-            phoneNumber: values.phoneNumber,
-            password: values.password,
-        });
+        dispatch(registerUser(values))
     };
 
     const inputBase =
-        "h-10 bg-background dark:bg-[#0F172A] border-input focus:border-primary focus:ring-primary/20 placeholder:text-muted-foreground/60 transition-all rounded-lg text-sm w-full";
+        "h-10 bg-background border-input focus:border-primary focus:ring-primary/20 placeholder:text-muted-foreground/60 transition-all rounded-lg text-sm w-full";
     const inputError =
         "border-destructive focus:border-destructive focus:ring-destructive/20";
 
@@ -106,7 +99,7 @@ export default function RegisterModal({ isOpen, onClose, onSwitchLogin }: Regist
                         transition={{ duration: 0.2, ease: "easeOut" }}
                     >
                         <div
-                            className="relative bg-card dark:bg-[#1E293B] rounded-2xl w-full max-w-md p-4 shadow-2xl border border-border/60 my-4"
+                            className="relative bg-card rounded-2xl w-full max-w-md p-4 shadow-2xl border border-border/60 my-4"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
@@ -184,38 +177,6 @@ export default function RegisterModal({ isOpen, onClose, onSwitchLogin }: Regist
 
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-medium text-foreground/90 block">
-                                        {t("phoneNumber")}
-                                    </label>
-                                    <div className="relative">
-                                        <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-muted-foreground/80">
-                                            <Phone className="h-5 w-5" strokeWidth={1.5} />
-                                        </span>
-                                        <Controller
-                                            name="phoneNumber"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <Input
-                                                    type="tel"
-                                                    placeholder={t("phonePlaceholder")}
-                                                    maxLength={10}
-                                                    {...field}
-                                                    onChange={(e) =>
-                                                        field.onChange(e.target.value.replace(/\D/g, ""))
-                                                    }
-                                                    className={`pl-11 pr-4 ${inputBase} ${errors.phoneNumber ? inputError : ""}`}
-                                                />
-                                            )}
-                                        />
-                                    </div>
-                                    {errors.phoneNumber && (
-                                        <p className="text-xs font-semibold text-destructive mt-1 animate-in fade-in duration-300">
-                                            {errors.phoneNumber.message}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="space-y-1.5">
-                                    <label className="text-sm font-medium text-foreground/90 block">
                                         {t("password")}
                                     </label>
                                     <div className="relative">
@@ -284,15 +245,12 @@ export default function RegisterModal({ isOpen, onClose, onSwitchLogin }: Regist
 
                                 <Button
                                     type="submit"
-                                    disabled={registerMutation.isPending}
+                                    disabled={loading}
                                     className="w-full h-12 bg-primary cursor-pointer text-primary-foreground font-semibold text-sm rounded-lg hover:bg-primary/95 transition-all shadow-md active:translate-y-px"
                                 >
-                                    {registerMutation.isPending ? (
+                                    {loading ? (
                                         <span className="flex items-center gap-2">
-                                            <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                                            </svg>
+                                            <Loader className="h-4 w-4 animate-spin" />
                                             {t("submit")}
                                         </span>
                                     ) : t("submit")}

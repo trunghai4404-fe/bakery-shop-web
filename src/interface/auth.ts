@@ -4,9 +4,31 @@ export interface LoginRequest {
     password: string;
 }
 export interface LoginResponse {
+    jwtResponse: JwtResponse;
+    user: User;
+}
+
+export interface JwtResponse {
     accessToken: string;
+    accessTokenExpireAt: number;
     refreshToken: string;
-    expiresInSeconds: number;
+    refreshTokenExpireAt: number;
+}
+export interface User {
+    id: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    avatar: string;
+    isActive: boolean;
+    sex: string;
+    lastLoginAt: string;
+    createdAt: string;
+    updatedAt: string;
+    isDeleted: boolean;
+    deletedAt: string;
+    roles: string[];
+    permissions: string[];
 }
 
 export interface Profile {
@@ -25,9 +47,8 @@ export interface Profile {
     roles: string[];
 }
 
-export interface Register {
+export interface RegisterRequest {
     email: string;
-    phoneNumber: string;
     password: string;
     fullName: string;
 }

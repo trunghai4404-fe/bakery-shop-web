@@ -1,4 +1,7 @@
 {
+  "overview": {
+    "fallbackError": "An error occurred, please try again."
+  },
   "NotFound": {
     "title": "Page not found",
     "description": "The page you are looking for does not exist or has been moved. Please return to the Home page.",
@@ -6,12 +9,15 @@
     "back": "Go Back"
   },
   "Header": {
+    "home": "Home",
+    "products": "Products",
+    "menu": "Menu",
     "introduce": "Introduce",
     "contact": "Contact",
     "news": "News",
-    "goToApp": "Find a court",
+    "goToApp": "Buy Now",
     "search": "Search...",
-    "searchPlaceholder": "Search courts, sports, locations...",
+    "searchPlaceholder": "Search bakery, chocolate, bread, ...",
     "notifications": "Notifications",
     "noNotifications": "No new notifications",
     "viewAll": "View all",
@@ -45,6 +51,7 @@
     "feature3": "Discover local clubs and join active communities",
     "emailRequired": "Email is required",
     "emailInvalid": "Please enter a valid email address",
+    "EmailAlreadyExists": "Email already exists",
     "passwordRequired": "Password is required",
     "passwordMin": "Password must be at least 6 characters",
     "success": "Logged in successfully!",

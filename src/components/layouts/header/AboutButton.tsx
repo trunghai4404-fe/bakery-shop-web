@@ -66,7 +66,7 @@ export default function AboutButton({ label }: AboutButtonProps) {
     isMobile ? (
       <Link
         href="/about"
-        className="relative inline-flex items-center justify-center h-auto px-3 py-1.5 text-xs font-bold tracking-widest text-primary dark:text-primary-container bg-linear-to-r from-primary/5 to-primary-container/10 dark:from-primary/10 dark:to-primary-container/20 rounded-lg border border-primary/20 dark:border-primary-container/30 hover:shadow-[0_0_12px_rgba(157,67,0,0.15)] active:scale-95 transition-all duration-200 cursor-pointer"
+        className="relative inline-flex items-center justify-center h-auto px-3 py-1.5 text-xs font-bold tracking-widest text-primary bg-linear-to-r from-primary/5 to-primary-container/10 rounded-lg border border-primary/20 hover:shadow-[0_0_12px_rgba(157,67,0,0.15)] active:scale-95 transition-all duration-200 cursor-pointer"
       >
         <span className="relative z-10 flex items-center gap-1">
           {label}
@@ -77,7 +77,7 @@ export default function AboutButton({ label }: AboutButtonProps) {
         href="/about"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative sm:inline-flex items-center justify-center px-4 py-2 text-xs font-bold tracking-wider rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 text-zinc-700 dark:text-zinc-300 overflow-hidden group transition-all duration-300 hover:shadow-[0_0_15px_rgba(157,67,0,0.25)] hover:border-primary/40 cursor-pointer"
+        className="relative sm:inline-flex items-center justify-center px-4 py-2 text-xs font-bold tracking-wider rounded-lg border border-zinc-200 bg-white/50 text-zinc-700 overflow-hidden group transition-all duration-300 hover:shadow-[0_0_15px_rgba(157,67,0,0.25)] hover:border-primary/40 cursor-pointer"
       >
         <span
           className="absolute inset-0 bg-linear-to-r from-primary to-primary-container pointer-events-none"

@@ -1,138 +1,277 @@
 'use client'
 
-import React, { useState } from 'react'
-import Image from 'next/image'
-import { Link } from '@/i18n/routing'
+import React, { useState, useEffect } from 'react'
+import { Link, usePathname } from '@/i18n/routing'
 import { useLocale, useTranslations } from 'next-intl'
 import {
-    Bell,
-    Heart,
-    Menu
+  Home,
+  Info,
+  PhoneCall,
+  ShoppingCart,
+  Menu as MenuIcon,
+  Globe,
+  Cake
 } from 'lucide-react'
-import { appImages } from '@/constants/appInfo'
+import { motion } from 'framer-motion'
 
-import AboutButton from './header/AboutButton'
-import SearchInput from './header/SearchInput'
 import LanguageSwitcher from './header/LanguageSwitcher'
-import ThemeToggle from './header/ThemeToggle'
 import UserMenu from './header/UserMenu'
-
-import {
-    Sheet,
-    SheetTrigger,
-    SheetContent,
-    SheetTitle,
-} from "@/components/ui/sheet"
-import { useIsMobile } from '@/hook/useIsMobile'
 import { useRouter } from 'next/navigation'
+import { useAppDispatch } from '@/redux/store/hooks'
+import { logOutUser } from '@/redux/store/slices/auth/auth.action'
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetTitle,
+} from '@/components/ui/sheet'
 
 export default function Header() {
-    const locale = useLocale()
-    const t = useTranslations('Header')
-    const lang = locale as "vi" | "en"
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-    const isMobile = useIsMobile();
-    const router = useRouter();
+  const locale = useLocale()
+  const t = useTranslations('Header')
+  const lang = locale as 'vi' | 'en'
+  const pathname = usePathname()
+  const router = useRouter()
+  const dispatch = useAppDispatch()
 
-    const userMenuLabels = {
-        profile: t('profile'),
-        bookings: t('bookings'),
-        settings: t('settings'),
-        logout: t('logout'),
-        login: t('login'),
-        register: t('register')
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 15)
     }
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    await dispatch(logOutUser())
+    router.replace('/')
+    router.refresh()
+  }
+
+  const userMenuLabels = {
+    profile: t('profile'),
+    bookings: t('bookings'),
+    settings: t('settings'),
+    logout: t('logout'),
+    login: t('login'),
+    register: t('register')
+  }
+
+  const leftNavItems = [
+    {
+      href: '/',
+      label: t('home'),
+      icon: Home,
+      exact: true
+    },
+    {
+      href: '/product-list',
+      label: t('products'),
+      icon: Cake,
+      exact: false
+    }
+  ]
+
+  const rightNavItems = [
+    {
+      href: '/about',
+      label: t('introduce'),
+      icon: Info,
+      exact: false
+    },
+    {
+      href: '/contact',
+      label: t('contact'),
+      icon: PhoneCall,
+      exact: false
+    }
+  ]
+
+  const allNavItems = [...leftNavItems, ...rightNavItems]
+
+  const isLinkActive = (href: string, exact = false) => {
+    if (exact) {
+      return pathname === '/' || pathname === `/${lang}`
+    }
+    return pathname.startsWith(href)
+  }
+
+  const handleCartClick = () => {
+    router.push('/product-list')
+  }
+
+  const renderNavLink = (item: { href: string; label: string; exact: boolean }) => {
+    const active = isLinkActive(item.href, item.exact)
     return (
-        <header className="sticky top-0 z-40 w-full border-b border-[#E5E5E5] bg-white/80 backdrop-blur-md dark:border-zinc-800/60 dark:bg-zinc-950/80 transition-all duration-300">
-            {isMobile ? (
-                <div className='flex flex-col py-4 gap-3 items-center justify-between'>
-                    <div className='flex h-10 gap-2 items-center justify-between w-full px-4'>
-                        <div className="flex items-center gap-3">
-                            <Link href="/" className="flex items-center gap-2 group transition-transform duration-200 active:scale-98">
-                                <div className="relative w-18 h-8 overflow-hidden sm:w-32 sm:h-10">
-                                    <Image
-                                        src={appImages.LogoMain}
-                                        alt="SportHub Logo"
-                                        fill
-                                        sizes="(max-width: 640px) 112px, 128px"
-                                        priority
-                                        className="object-fill"
-                                    />
-                                </div>
-                            </Link>
-
-                            <AboutButton label={t('introduce')} />
-                        </div>
-                        <div className='flex gap-3 justify-center items-center'>
-                            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-primary/50 dark:border-primary-container/30 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 cursor-pointer">
-                                <Bell className="h-4 w-4 stroke-[1.5] text-primary" />
-                                <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[8px] font-bold text-white  ">
-                                    2
-                                </span>
-                            </div>
-                            <ThemeToggle />
-                            <UserMenu labels={userMenuLabels} />
-                        </div>
-                    </div>
-                    <div className='w-full flex gap-2 px-4 items-center justify-between border-t border-[#E5E5E5] dark:border-zinc-800/60 pt-4'>
-                        <SearchInput placeholder={t('searchPlaceholder')} />
-                        <div
-                            onClick={() => {
-                                router.push('/favorites')
-                            }}
-                            className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-primary/50 dark:border-primary-container/30 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 cursor-pointer'>
-                            <Heart className="h-4.5 w-4.5 stroke-[1.5] hover:fill-destructive text-primary" />
-                        </div>
-                    </div>
-                </div>
-            ) : (
-                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-                    <div className="flex items-center gap-6">
-                        <Link href="/" className="flex items-center gap-2 group transition-transform duration-200 active:scale-98">
-                            <div className="relative w-28 h-9 overflow-hidden sm:w-32 sm:h-10">
-                                <Image
-                                    src={appImages.LogoMain}
-                                    alt="SportHub Logo"
-                                    fill
-                                    sizes="(max-width: 640px) 112px, 128px"
-                                    priority
-                                    className="object-contain"
-                                />
-                            </div>
-                        </Link>
-
-                        <AboutButton label={t('introduce')} />
-                    </div>
-
-                    <div className="hidden md:block flex-1 max-w-xs md:max-w-md mx-4">
-                        <SearchInput placeholder={t('searchPlaceholder')} />
-                    </div>
-
-                    <div className="hidden md:flex items-center gap-4">
-                        <LanguageSwitcher currentLang={lang} />
-
-                        <ThemeToggle />
-
-                        <div
-                            onClick={() => {
-                                router.push('/favorites')
-                            }}
-                            className='flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-primary/50 dark:border-primary-container/30 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 cursor-pointer'>
-                            <Heart className="h-4.5 w-4.5 stroke-[1.5] hover:fill-destructive text-primary" />
-                        </div>
-
-                        <div className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-primary/50 dark:border-primary-container/30 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors text-zinc-500 dark:text-zinc-400 cursor-pointer">
-                            <Bell className="h-4 w-4 stroke-[1.5] text-primary" />
-                            <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[8px] font-bold text-white  ">
-                                2
-                            </span>
-                        </div>
-
-                        <UserMenu labels={userMenuLabels} />
-                    </div>
-                </div>
-            )}
-        </header>
+      <Link
+        key={item.href}
+        href={item.href}
+        className={`relative px-2.5 py-1 text-sm font-semibold tracking-wide transition-colors duration-200 ${active
+          ? 'text-primary font-bold cursor-default'
+          : 'text-on-surface hover:text-primary'
+          }`}
+      >
+        <span>{item.label}</span>
+        {active && (
+          <motion.div
+            layoutId="header-active-nav"
+            className="absolute -bottom-1 left-1.5 right-1.5 h-0.5 rounded-full bg-primary"
+            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+          />
+        )}
+      </Link>
     )
+  }
+
+  return (
+    <header
+      className={`sticky top-0 z-40 w-full border-b backdrop-blur-md transition-all duration-300 ease-in-out ${isScrolled
+        ? 'border-primary/50 bg-surface/95 shadow-[0_8px_30px_rgba(74,53,51,0.08)]'
+        : 'border-primary/30 bg-surface/85 shadow-[0_4px_20px_rgba(74,53,51,0.04)]'
+        }`}
+    >
+      <div
+        className={`hidden md:flex mx-auto max-w-7xl items-center justify-between px-4 sm:px-6 relative transition-all duration-300 ease-in-out ${isScrolled ? 'h-15' : 'h-20'
+          }`}
+      >
+        <div className="flex items-center gap-5">
+          <nav className="flex items-center gap-4">
+            {leftNavItems.map(renderNavLink)}
+          </nav>
+        </div>
+
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <Link href="/" className="flex items-center gap-1.5 group transition-transform duration-200 active:scale-98">
+            <span
+              className={`font-heading font-bold tracking-tight text-primary transition-all duration-300 group-hover:opacity-90 ${isScrolled ? 'text-xl' : 'text-2xl'
+                }`}
+            >
+              Bakery<span className="text-secondary">.</span>
+            </span>
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-4">
+            {rightNavItems.map(renderNavLink)}
+          </nav>
+
+          <div className="h-4 w-px bg-outline-variant/50" />
+
+          <div className="flex items-center gap-2.5">
+            <LanguageSwitcher currentLang={lang} />
+
+            <button
+              onClick={handleCartClick}
+              className="relative flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface-container-low/60 hover:bg-primary/10 hover:border-primary/40 transition-all duration-200 text-on-surface-variant hover:text-primary cursor-pointer active:scale-95"
+              title={lang === 'vi' ? 'Sản phẩm / Giỏ hàng' : 'Products / Cart'}
+            >
+              <ShoppingCart className="h-4 w-4 stroke-[1.8]" />
+            </button>
+
+            <UserMenu
+              labels={userMenuLabels}
+              isLoggingOut={isLoggingOut}
+              onLogout={handleLogout}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        className={`flex md:hidden mx-auto items-center justify-between px-4 transition-all duration-300 ease-in-out ${isScrolled ? 'h-[60px]' : 'h-[80px]'
+          }`}
+      >
+        <Link href="/" className="flex items-center gap-1.5 group">
+          <span
+            className={`font-heading font-bold tracking-tight text-primary transition-all duration-300 ${isScrolled ? 'text-lg' : 'text-xl'
+              }`}
+          >
+            Bakery<span className="text-secondary">.</span>
+          </span>
+        </Link>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleCartClick}
+            className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface-container-low text-on-surface-variant cursor-pointer active:scale-95"
+            title={lang === 'vi' ? 'Sản phẩm / Giỏ hàng' : 'Products / Cart'}
+          >
+            <ShoppingCart className="h-4 w-4 stroke-[1.8] text-primary" />
+          </button>
+
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger
+              className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface-container-low text-on-surface hover:text-primary transition-all duration-200 cursor-pointer active:scale-95"
+              aria-label="Toggle menu"
+            >
+              <MenuIcon className="h-4 w-4" />
+            </SheetTrigger>
+
+            <SheetContent side="right" className="w-[85vw] max-w-xs p-0 flex flex-col h-full bg-surface border-l border-outline-variant/30 transition-all duration-300">
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+
+              <div className="flex flex-col h-full justify-between p-5">
+                <div className="flex flex-col gap-5">
+                  <div className="flex items-center justify-between pb-3 border-b border-outline-variant/30">
+                    <span className="font-heading text-lg font-bold text-primary">
+                      Bakery<span className="text-secondary">.</span>
+                    </span>
+                  </div>
+
+                  <nav className="flex flex-col gap-1">
+                    {allNavItems.map((item) => {
+                      const active = isLinkActive(item.href, item.exact)
+                      const Icon = item.icon
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setIsOpen(false)}
+                          className={`relative flex items-center gap-2.5 px-3 py-2 rounded-lg font-medium text-xs transition-all duration-200 ${active
+                            ? 'text-primary font-bold cursor-default'
+                            : 'text-on-surface-variant hover:text-primary hover:bg-surface-container'
+                            }`}
+                        >
+                          <Icon className={`h-4 w-4 stroke-[1.8] ${active ? 'text-primary' : 'text-on-surface-variant/70'}`} />
+                          <span>{item.label}</span>
+                          {active && (
+                            <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-primary" />
+                          )}
+                        </Link>
+                      )
+                    })}
+                  </nav>
+                </div>
+
+                <div className="flex flex-col gap-3 pt-3 border-t border-outline-variant/30">
+                  <div className="flex items-center justify-between px-3 py-1.5 rounded-lg border border-outline-variant/30 bg-surface-container-low">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-on-surface-variant">
+                      <Globe className="h-3.5 w-3.5 stroke-[1.8] text-primary" />
+                      <span>{lang === 'vi' ? 'Ngôn ngữ' : 'Language'}</span>
+                    </div>
+                    <LanguageSwitcher currentLang={lang} />
+                  </div>
+
+                  <div className="w-full">
+                    <UserMenu
+                      labels={userMenuLabels}
+                      isLoggingOut={isLoggingOut}
+                      onLogout={handleLogout}
+                    />
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  )
 }

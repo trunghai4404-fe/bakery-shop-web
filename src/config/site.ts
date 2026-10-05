@@ -2,21 +2,19 @@ import { SiteConfig } from '@/types'
 import { env } from '@/env.mjs'
 
 export const siteConfig: SiteConfig = {
-  name: 'SportHub',
-  author: 'SportHub Team',
+  name: 'bakery-shop',
+  author: 'bakery shop',
 
   description:
-    'SportHub là ứng dụng đặt sân, đặt lịch tập trực tuyến, tìm kiếm đồng đội và kết nối cộng đồng đam mê thể thao hàng đầu Việt Nam. Tiện lợi, nhanh chóng, uy tín.',
+    'Khám phá các loại bánh ngon nhất, được làm từ những nguyên liệu tươi ngon và chất lượng nhất. bakery-shop - Bánh ngon mỗi ngày.',
 
   keywords: [
-    'SportHub',
-    'đặt sân trực tuyến',
-    'đặt sân bóng',
-    'đặt lịch tập',
-    'tìm đối cáp kèo',
-    'cộng đồng thể thao',
-    'book sân online',
-    'thể thao việt nam',
+    'bakery-shop',
+    'bánh ngọt',
+    'bánh mì',
+    'đặt bánh online',
+    'bánh ngon',
+    'bánh tươi',
   ],
 
   url: {

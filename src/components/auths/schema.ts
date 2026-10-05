@@ -21,10 +21,6 @@ export const RegisterSchema = (t: any) =>
       email: z
         .email({ error: t("emailInvalid") })
         .min(1, { error: t("emailRequired") }),
-      phoneNumber: z
-        .string()
-        .min(1, { error: t("phoneRequired") })
-        .regex(/^(03|05|07|08|09)\d{8}$/, { error: t("phoneInvalid") }),
       password: z
         .string()
         .min(1, { error: t("passwordRequired") })

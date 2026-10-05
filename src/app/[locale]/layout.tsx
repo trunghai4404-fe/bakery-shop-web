@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "../globals.css";
+import "@/app/globals.css";
 import Providers from "../providers";
 import { siteConfig } from "@/config/site";
 import { NextIntlClientProvider } from "next-intl";
@@ -8,9 +8,18 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { LoadingProvider } from "@/context/LoadingContext";
 import NextTopLoader from 'nextjs-toploader'
-import { Toaster } from "@/components/ui/toast";
-import { AuthModalProvider } from "@/components/auths/AuthModalProvider";
 import { ToastProvider } from "@/components/toast/ToastProvider";
+import AuthManager from "@/redux/auth/authManager";
+import { cookies } from "next/headers";
+import { LOCALE_COOKIE } from "@/constants/cookies";
+import { Plus_Jakarta_Sans } from "next/font/google";
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -76,24 +85,23 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className="h-full antialiased"
+      className={`${jakarta.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider messages={messages}>
+      <body className="min-h-full flex flex-col font-sans">
+        <NextIntlClientProvider messages={messages} locale={locale} key={locale}>
           <LoadingProvider>
             <NextTopLoader
-              color="linear-gradient(to right, #9d4300, #f97316, #adc6ff, #f97316, #9d4300)"
+              color="linear-gradient(to right, #D99AAA, #9A7668, #9BAF98, #D99AAA)"
               height={3}
               showSpinner={true}
               crawl={true}
               speed={250}
               easing="ease"
-              shadow="0 0 10px #f97316, 0 0 5px #9d4300"
+              shadow="0 0 10px #D99AAA, 0 0 5px #9A7668"
             />
             <Providers>
-              <AuthModalProvider>
-                {children}
-              </AuthModalProvider>
+              <AuthManager />
+              {children}
               <ToastProvider />
             </Providers>
           </LoadingProvider>

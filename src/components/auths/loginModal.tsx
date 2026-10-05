@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, X } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, X, Loader } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
@@ -16,9 +16,11 @@ import { Input } from "@/components/ui/input";
 import { appImages } from "@/constants/appInfo";
 import { toast } from "@/components/ui/toast";
 import { LoginSchema } from "@/components/auths/schema";
-import { useLogin } from "@/features/auths/hooks/useLogin";
 import { Separator } from "../ui/separator";
 import { showCustomToast } from "../toast/CustomToast";
+import { useAppDispatch, useAppSelector } from "../../../redux/store/hooks";
+import { loginUser } from "../../../redux/store/slices/auth/auth.action";
+import { getErrorMessage } from "@/lib/helper";
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -28,11 +30,13 @@ interface LoginModalProps {
 
 export default function LoginModal({ isOpen, onClose, onSwitchRegister }: LoginModalProps) {
     const t = useTranslations("Login");
-    const loginMutation = useLogin(onClose);
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const loginSchema = LoginSchema(t);
     type LoginFormValues = z.infer<typeof loginSchema>;
+    const dispatch = useAppDispatch();
+    const loading = useAppSelector((state) => state.auth.loading);
 
     const {
         register,
@@ -59,8 +63,26 @@ export default function LoginModal({ isOpen, onClose, onSwitchRegister }: LoginM
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [isOpen, onClose]);
 
-    const onSubmit = (values: LoginFormValues) => {
-        loginMutation.mutate({ email: values.email.trim(), password: values.password });
+    const onSubmit = async (values: LoginFormValues) => {
+        setIsLoading(true);
+        try {
+            await dispatch(loginUser(values));
+            showCustomToast({
+                message: t("success"),
+                type: "success"
+            })
+            onClose();
+        }
+        catch (e) {
+            const errorMsg = getErrorMessage(e);
+            showCustomToast({
+                message: errorMsg,
+                type: "error"
+            });
+        }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     if (typeof window === "undefined") return null;
@@ -86,7 +108,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchRegister }: LoginM
                         transition={{ duration: 0.2, ease: "easeOut" }}
                     >
                         <div
-                            className="relative bg-card dark:bg-[#1E293B] rounded-2xl w-full max-w-md p-4 shadow-2xl border border-border/60"
+                            className="relative bg-card rounded-2xl w-full max-w-md p-4 shadow-2xl border border-border/60"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
@@ -127,7 +149,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchRegister }: LoginM
                                             placeholder={t("emailPlaceholder")}
                                             autoFocus
                                             {...register("email")}
-                                            className={`h-12 pl-11 pr-4 bg-background dark:bg-[#0F172A] border-input focus:border-primary focus:ring-primary/20 placeholder:text-muted-foreground/60 transition-all rounded-lg text-sm w-full ${errors.email
+                                            className={`h-12 pl-11 pr-4 bg-background border-input focus:border-primary focus:ring-primary/20 placeholder:text-muted-foreground/60 transition-all rounded-lg text-sm w-full ${errors.email
                                                 ? "border-destructive focus:border-destructive focus:ring-destructive/20"
                                                 : ""
                                                 }`}
@@ -161,7 +183,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchRegister }: LoginM
                                             type={showPassword ? "text" : "password"}
                                             placeholder={t("passwordPlaceholder")}
                                             {...register("password")}
-                                            className={`h-12 pl-11 pr-12 bg-background dark:bg-[#0F172A] border-input focus:border-primary focus:ring-primary/20 placeholder:text-muted-foreground/60 transition-all rounded-lg text-sm w-full ${errors.password
+                                            className={`h-12 pl-11 pr-12 bg-background border-input focus:border-primary focus:ring-primary/20 placeholder:text-muted-foreground/60 transition-all rounded-lg text-sm w-full ${errors.password
                                                 ? "border-destructive focus:border-destructive focus:ring-destructive/20"
                                                 : ""
                                                 }`}
@@ -188,15 +210,12 @@ export default function LoginModal({ isOpen, onClose, onSwitchRegister }: LoginM
 
                                 <Button
                                     type="submit"
-                                    disabled={loginMutation.isPending}
+                                    disabled={loading}
                                     className="w-full h-12 bg-primary cursor-pointer text-primary-foreground font-semibold text-sm rounded-lg hover:bg-primary/95 transition-all shadow-md active:translate-y-px"
                                 >
-                                    {loginMutation.isPending ? (
+                                    {loading ? (
                                         <span className="flex items-center gap-2">
-                                            <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                                            </svg>
+                                            <Loader className="h-4 w-4 animate-spin" />
                                             {t("submit")}
                                         </span>
                                     ) : t("submit")}
@@ -214,7 +233,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchRegister }: LoginM
                             <Button
                                 type="button"
                                 variant="outline"
-                                className="w-full h-12 cursor-pointer border-border/80 font-medium text-foreground/80 text-sm hover:bg-muted dark:hover:bg-muted/10 gap-2.5 rounded-lg flex items-center justify-center transition-all active:translate-y-px"
+                                className="w-full h-12 cursor-pointer border-border/80 font-medium text-foreground/80 text-sm hover:bg-muted gap-2.5 rounded-lg flex items-center justify-center transition-all active:translate-y-px"
                                 onClick={() => {
                                     showCustomToast({ message: "Google login is not implemented yet", type: "error" });
                                 }}

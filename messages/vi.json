@@ -1,4 +1,7 @@
 {
+  "overview": {
+    "fallbackError": "Có lỗi xảy ra, vui lòng thử lại"
+  },
   "NotFound": {
     "title": "Không tìm thấy trang",
     "description": "Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển. Vui lòng quay lại Trang chủ.",
@@ -6,12 +9,15 @@
     "back": "Quay Lại"
   },
   "Header": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "menu": "Menu",
     "introduce": "Giới thiệu",
     "contact": "Liên hệ",
     "news": "Tin tức",
-    "goToApp": "Tìm sân ngay",
+    "goToApp": "Mua ngay",
     "search": "Tìm kiếm...",
-    "searchPlaceholder": "Tìm kiếm sân, môn thể thao, địa điểm...",
+    "searchPlaceholder": "Tìm kiếm bánh kem, bánh socola, bánh ngọt...",
     "notifications": "Thông báo",
     "noNotifications": "Không có thông báo mới",
     "viewAll": "Xem tất cả",
@@ -45,6 +51,7 @@
     "feature3": "Khám phá câu lạc bộ và tham gia cộng đồng năng động",
     "emailRequired": "Vui lòng nhập email",
     "emailInvalid": "Email không đúng định dạng",
+    "EmailAlreadyExists": "Email đã tồn tại",
     "passwordRequired": "Vui lòng nhập mật khẩu",
     "passwordMin": "Mật khẩu phải dài ít nhất 6 ký tự",
     "success": "Đăng nhập thành công!",
