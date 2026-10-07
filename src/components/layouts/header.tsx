@@ -147,7 +147,7 @@ export default function Header() {
         : 'border-primary/25 bg-surface/85 shadow-[0_4px_20px_rgba(74,53,51,0.04)]'
         }`}
     >
-      <div className="hidden md:flex mx-auto px-4 lg:px-0 max-w-7xl h-20 items-center justify-between relative">
+      <div className="hidden md:flex mx-auto px-4 xl:px-0 max-w-7xl h-20 items-center justify-between relative">
         <div className="flex items-center gap-5">
           <nav className="flex items-center gap-4">
             {leftNavItems.map(renderNavLink)}

@@ -14,7 +14,7 @@ interface ProductListGridProps {
 export default function ProductListGrid({ products = [], loading = false }: ProductListGridProps) {
     if (loading) {
         return (
-            <div className="grid grid-cols-2 min-[640px]:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 w-full">
+            <div className="grid grid-cols-2 min-[640px]:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 w-full">
                 {Array.from({ length: 8 }).map((_, idx) => (
                     <ProductCardSkeleton key={idx} />
                 ))}
@@ -39,7 +39,7 @@ export default function ProductListGrid({ products = [], loading = false }: Prod
     }
 
     return (
-        <div className="grid grid-cols-2 min-[640px]:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 w-full">
+        <div className="grid grid-cols-2 min-[640px]:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 w-full">
             {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
             ))}

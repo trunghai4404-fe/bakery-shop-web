@@ -38,7 +38,7 @@ export default function SortDropdown({ value, options, onChange }: SortDropdownP
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full inline-flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 text-xs sm:text-sm font-semibold text-on-surface hover:border-primary/40 focus:outline-hidden focus:ring-2 focus:ring-primary/30 transition-all duration-200 shadow-2xs cursor-pointer"
+                className="w-full inline-flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/40 text-xs sm:text-sm font-semibold text-on-surface hover:border-primary/40 focus:outline-hidden focus:ring-2 focus:ring-primary/30 transition-all duration-200 shadow-2xs cursor-pointer"
             >
                 <div className="flex items-center gap-1.5 truncate">
                     <ArrowUpDown className="h-3.5 w-3.5 text-primary shrink-0" />
@@ -51,7 +51,7 @@ export default function SortDropdown({ value, options, onChange }: SortDropdownP
             </button>
 
             {isOpen && (
-                <div className="absolute left-0 right-0 mt-1.5 w-full rounded-2xl bg-surface-container-lowest border border-outline-variant/30 shadow-xl p-1 z-999 animate-in fade-in zoom-in-95 duration-150 overflow-hidden">
+                <div className="absolute left-0 right-0 mt-1.5 w-full rounded-lg bg-surface-container-lowest border border-outline-variant/30 shadow-xl p-1 z-999 animate-in fade-in zoom-in-95 duration-150 overflow-hidden">
                     <div className="px-3 py-1.5 text-[11px] font-bold tracking-wider text-on-surface-variant/70 uppercase border-b border-outline-variant/20 mb-1">
                         Sắp xếp theo
                     </div>

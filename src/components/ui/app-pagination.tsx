@@ -90,7 +90,7 @@ export default function AppPagination({
                             type="button"
                             onClick={() => onPageChange(pageNum)}
                             disabled={disabled || isActive}
-                            className={`h-9 sm:h-10 min-w-9 sm:min-w-10 px-3 rounded-2xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center justify-center ${isActive
+                            className={`h-9 sm:h-10 min-w-9 sm:min-w-10 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center justify-center ${isActive
                                 ? 'bg-primary/10 text-primary border border-primary/40'
                                 : 'bg-surface-container-lowest border border-outline-variant/40 text-on-surface hover:bg-surface-container-low hover:border-outline-variant/70'
                                 }`}

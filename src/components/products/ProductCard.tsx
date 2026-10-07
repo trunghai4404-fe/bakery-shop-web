@@ -19,7 +19,7 @@ export default function ProductCard({ product, showAddToCartText = false }: Prod
     const price = primaryVariant?.price;
 
     const categoryName = product.categories?.[0]?.name;
-    const productUrl = product.slug ? `/product-list?slug=${product.slug}` : '/product-list';
+    const productUrl = product.slug ? `/product-detail/${product.slug}` : '/product-list';
 
     const handleAddToCart = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -30,7 +30,7 @@ export default function ProductCard({ product, showAddToCartText = false }: Prod
     return (
         <Link
             href={productUrl}
-            className="group relative flex flex-col h-full rounded-2xl bg-surface-container-lowest border border-outline-variant/30 shadow-xs hover:border-primary/40 transition-all duration-300 overflow-hidden cursor-pointer"
+            className="group relative flex flex-col h-full rounded-lg bg-surface-container-lowest border border-outline-variant/30 shadow-xs hover:border-primary/40 transition-all duration-300 overflow-hidden cursor-pointer"
         >
             <ProductCardImageSwiper
                 images={product.images}
@@ -38,17 +38,13 @@ export default function ProductCard({ product, showAddToCartText = false }: Prod
                 categoryName={categoryName}
             />
 
-            <div className="flex flex-col flex-1 p-3.5 sm:p-4">
+            <div className="flex flex-col flex-1 p-3 sm:p-4">
                 <h3
                     className="font-heading text-sm sm:text-base font-bold text-on-surface group-hover:text-primary transition-colors line-clamp-1 mb-1.5 tracking-tight"
                     title={product.name}
                 >
                     {product.name}
                 </h3>
-
-                <p className="text-xs text-on-surface-variant line-clamp-2 leading-relaxed mb-3.5 h-9 overflow-hidden">
-                    {product.description || 'Bánh tươi thơm ngon được chế biến từ nguyên liệu cao cấp mỗi ngày.'}
-                </p>
 
                 <div className="flex items-center justify-between gap-2 pt-3 border-t border-outline-variant/25 mt-auto">
                     <div className="flex flex-col shrink-0">
@@ -62,9 +58,9 @@ export default function ProductCard({ product, showAddToCartText = false }: Prod
 
                     <button
                         onClick={handleAddToCart}
-                        className={`shrink-0 whitespace-nowrap inline-flex items-center justify-center text-primary bg-primary/10 hover:bg-primary hover:text-white active:scale-95 border border-primary/15 transition-all duration-200 cursor-pointer group/btn shadow-2xs ${showAddToCartText
-                            ? 'gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold rounded-xl'
-                            : 'p-2 sm:p-2.5 rounded-xl'
+                        className={`shrink-0  rounded-lg whitespace-nowrap inline-flex items-center justify-center text-primary bg-primary/10 hover:bg-primary hover:text-white active:scale-95 border border-primary/15 transition-all duration-200 cursor-pointer group/btn shadow-2xs ${showAddToCartText
+                            ? 'gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold'
+                            : 'p-2 sm:p-2.5'
                             }`}
                         title="Thêm vào giỏ hàng"
                     >

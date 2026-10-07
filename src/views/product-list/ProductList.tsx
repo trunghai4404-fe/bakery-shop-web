@@ -238,7 +238,7 @@ export default function ProductList({ initialCategoryTree = [] }: ProductListPro
                 />
 
                 <div className="flex-1 w-full space-y-6">
-                    <div className="relative z-30 bg-surface-container-lowest border border-outline-variant/30 rounded-3xl p-5 sm:p-6 shadow-2xs space-y-3">
+                    <div className="relative z-30 bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-4 shadow-2xs space-y-3">
                         <div className="space-y-1.5">
                             <div className="flex items-center justify-between gap-3">
                                 <h1 className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-on-surface">
@@ -267,7 +267,7 @@ export default function ProductList({ initialCategoryTree = [] }: ProductListPro
                                     value={searchInput}
                                     onChange={(e) => setSearchInput(e.target.value)}
                                     placeholder="Tìm kiếm tên bánh, vị bánh..."
-                                    className="w-full pl-9 pr-4 py-2.5 rounded-2xl bg-surface-container-low border border-outline-variant/40 text-xs sm:text-sm text-on-surface placeholder:text-on-surface-variant/60 focus:outline-hidden focus:ring-2 focus:ring-primary/30 transition-all"
+                                    className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-surface-container-low border border-outline-variant/40 text-xs sm:text-sm text-on-surface placeholder:text-on-surface-variant/60 focus:outline-hidden focus:ring-2 focus:ring-primary/30 transition-all"
                                 />
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-on-surface-variant/60" />
                             </form>

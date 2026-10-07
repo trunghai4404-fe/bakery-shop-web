@@ -1,6 +1,6 @@
 import callApi, { ApiResponse } from "@/apis/handleApi";
 import { ApiRouters } from "@/constants/api-routes";
-import { CategoriesParams, CategoriesResponse, CategoriesTree, ProductResponse, ProductsParams } from "@/interface/catalog";
+import { CategoriesParams, CategoriesResponse, CategoriesTree, ProductInterface, ProductResponse, ProductsParams } from "@/interface/catalog";
 
 export const CatalogApi = {
     getCategories: async (params: CategoriesParams): Promise<ApiResponse<CategoriesResponse>> => {
@@ -39,5 +39,9 @@ export const CatalogApi = {
         const url = `${ApiRouters.PRODUCTS}?${query.toString()}`
 
         return await callApi<ProductResponse>(url)
+    },
+    getProductBySlug: async (slug: string): Promise<ApiResponse<ProductInterface>> => {
+        const url = `${ApiRouters.PRODUCTS}/${slug}`
+        return await callApi<ProductInterface>(url)
     }
 }

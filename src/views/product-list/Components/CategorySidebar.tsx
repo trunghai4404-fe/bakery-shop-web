@@ -29,7 +29,7 @@ function TreeItem({ item, selectedSlug, onSelect, depth = 0 }: TreeItemProps) {
     return (
         <div className="space-y-1">
             <div
-                className={`group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${isSelected
+                className={`group flex items-center justify-between px-3 py-2.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${isSelected
                     ? 'bg-primary/10 text-primary font-bold border-l-4 border-primary shadow-2xs'
                     : 'text-on-surface hover:bg-surface-container-high hover:text-primary'
                     }`}
@@ -141,13 +141,12 @@ export default function CategorySidebar({
                             onSelectCategory(undefined);
                             setIsMobileOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${isAllSelected
+                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${isAllSelected
                             ? 'bg-primary/10 text-primary font-bold border-l-4 border-primary shadow-2xs'
                             : 'text-on-surface hover:bg-surface-container-high hover:text-primary'
                             }`}
                     >
                         <div className="flex items-center gap-2">
-                            <Cake className="h-4 w-4" />
                             <span>Tất cả sản phẩm</span>
                         </div>
                         {isAllSelected && <Check className="h-3.5 w-3.5 stroke-3" />}
@@ -171,7 +170,7 @@ export default function CategorySidebar({
 
     return (
         <>
-            <aside className="hidden lg:block w-64 xl:w-72 shrink-0 bg-surface-container-lowest border border-outline-variant/30 rounded-3xl p-5 shadow-xs h-fit sticky top-24">
+            <aside className="hidden lg:block w-64 xl:w-72 shrink-0 bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-4 shadow-xs h-fit sticky top-24">
                 {sidebarContent}
             </aside>
 
