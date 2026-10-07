@@ -9,4 +9,6 @@ export const ApiRouters = {
     UPDATE_PROFILE: `${BASE_URL}/users/me`,
     CATEGORIES: `${BASE_URL}/categories`,
     PRODUCTS: `${BASE_URL}/products`,
+    CONTENTS: `${BASE_URL}/contents`,
+    BANNERS: `${BASE_URL}/banners`
 }

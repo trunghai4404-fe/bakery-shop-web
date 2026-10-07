@@ -163,10 +163,7 @@ export default function Header() {
               src={appImages.BakeryLogo}
               alt="Bakery Logo"
               priority
-              className={`object-contain transition-all duration-300 ease-in-out filter ${isScrolled
-                ? 'h-14 sm:h-20 w-auto translate-y-4 drop-shadow-xs'
-                : 'h-24 sm:h-26 w-auto translate-y-6 sm:translate-y-7 drop-shadow-md'
-                }`}
+              className='object-contain transition-all duration-300 ease-in-out filter h-14 sm:h-20 w-auto translate-y-2 drop-shadow-xs'
             />
           </Link>
         </div>

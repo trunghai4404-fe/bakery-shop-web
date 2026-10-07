@@ -114,7 +114,7 @@ axiosClient.interceptors.response.use(
       }
     }
 
-    return Promise.reject(response ? response.data : "No response");
+    return Promise.reject((response && response.data) ? response.data : error);
   }
 );
 

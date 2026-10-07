@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { useEffect, useState } from 'react';
 
 interface ProductSliderProps {
     products: ProductInterface[];
@@ -16,9 +17,14 @@ interface ProductSliderProps {
 }
 
 export default function ProductSlider({ products, loading = false }: ProductSliderProps) {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const displayProducts = products.slice(0, 6);
 
-    if (loading) {
+    if (loading || !mounted) {
         return <ProductSkeletonGrid count={4} />;
     }
 

@@ -12,7 +12,7 @@ export default function MainLayout({
         <div className="min-h-screen flex flex-col">
             <main className="w-full flex-1">
                 <HeaderNavigationWrapper>
-                    <PageContainer>{children}</PageContainer>
+                    {children}
                 </HeaderNavigationWrapper>
             </main>
         </div>
