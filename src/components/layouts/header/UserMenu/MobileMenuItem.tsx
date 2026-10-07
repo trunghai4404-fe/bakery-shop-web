@@ -10,6 +10,7 @@ interface MobileMenuItemProps {
   icon: LucideIcon
   onClick?: () => void
   danger?: boolean
+  active?: boolean
 }
 
 export default function MobileMenuItem({
@@ -18,15 +19,18 @@ export default function MobileMenuItem({
   icon: Icon,
   onClick,
   danger = false,
+  active = false,
 }: MobileMenuItemProps) {
   const textClass = danger
     ? "text-destructive hover:bg-destructive/10"
-    : "text-zinc-700 hover:text-primary hover:bg-zinc-50"
+    : active
+      ? "text-primary font-bold bg-primary/10 border-l-4 border-primary rounded-r-xl rounded-l-none"
+      : "text-on-surface hover:text-primary hover:bg-surface-container"
 
   const content = (
     <>
-      <Icon className={`h-4.5 w-4.5 stroke-[1.5] ${danger ? "text-destructive" : "text-zinc-400"}`} />
-      <span>{label}</span>
+      <Icon className={`h-4.5 w-4.5 stroke-[1.8] ${danger ? "text-destructive" : active ? "text-primary" : "text-on-surface-variant/70"}`} />
+      <span className="flex-1">{label}</span>
     </>
   )
 
@@ -35,7 +39,7 @@ export default function MobileMenuItem({
       <Link
         href={href}
         onClick={onClick}
-        className={`flex items-center gap-3 px-3 py-2 text-xs font-semibold rounded-xl transition-colors cursor-pointer ${textClass}`}
+        className={`flex items-center gap-3 px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-all cursor-pointer ${textClass}`}
       >
         {content}
       </Link>
@@ -46,9 +50,10 @@ export default function MobileMenuItem({
     <button
       type="button"
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2 text-xs font-bold rounded-xl transition-colors text-left cursor-pointer ${textClass}`}
+      className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-sm font-bold rounded-xl transition-all text-left cursor-pointer ${textClass}`}
     >
       {content}
     </button>
   )
 }
+

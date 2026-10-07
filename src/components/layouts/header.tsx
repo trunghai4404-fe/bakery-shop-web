@@ -16,9 +16,12 @@ import { motion } from 'framer-motion'
 
 import LanguageSwitcher from './header/LanguageSwitcher'
 import UserMenu from './header/UserMenu'
+import MobileMenuContent from './header/UserMenu/MobileMenuContent'
 import { useRouter } from 'next/navigation'
-import { useAppDispatch } from '@/redux/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/redux/store/hooks'
 import { logOutUser } from '@/redux/store/slices/auth/auth.action'
+import { openLoginModal, openRegisterModal } from '@/redux/store/slices/auth/authModal.reducer'
+import { MENU_ITEMS_CONFIG } from '@/constants/constants'
 import {
   Sheet,
   SheetTrigger,
@@ -35,6 +38,7 @@ export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const user = useAppSelector((state) => state.auth.user)
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
@@ -67,12 +71,16 @@ export default function Header() {
 
   const userMenuLabels = {
     profile: t('profile'),
-    bookings: t('bookings'),
-    settings: t('settings'),
     logout: t('logout'),
     login: t('login'),
     register: t('register')
   }
+
+  const accountItems = MENU_ITEMS_CONFIG.map(item => ({
+    label: userMenuLabels[item.key as keyof typeof userMenuLabels],
+    href: item.href,
+    icon: item.icon,
+  }))
 
   const leftNavItems = [
     {
@@ -212,7 +220,7 @@ export default function Header() {
           <button
             onClick={handleCartClick}
             className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface-container-low text-on-surface-variant cursor-pointer active:scale-95"
-            title={lang === 'vi' ? 'Sản phẩm / Giỏ hàng' : 'Products / Cart'}
+            title={lang === 'vi' ? 'Giỏ hàng' : 'Cart'}
           >
             <ShoppingCart className="h-4 w-4 stroke-[1.8] text-primary" />
           </button>
@@ -222,63 +230,30 @@ export default function Header() {
               className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface-container-low text-on-surface hover:text-primary transition-all duration-200 cursor-pointer active:scale-95"
               aria-label="Toggle menu"
             >
-              <MenuIcon className="h-4 w-4" />
+              <MenuIcon className="h-4 w-4 stroke-[1.8] text-primary" />
             </SheetTrigger>
 
-            <SheetContent side="right" className="w-[85vw] max-w-xs p-0 flex flex-col h-full bg-surface border-l border-outline-variant/30 transition-all duration-300">
-              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-
-              <div className="flex flex-col h-full justify-between p-5">
-                <div className="flex flex-col gap-5">
-                  <div className="flex items-center justify-between pb-3 border-b border-outline-variant/30">
-                    <span className="font-heading text-lg font-bold text-primary">
-                      Bakery<span className="text-secondary">.</span>
-                    </span>
-                  </div>
-
-                  <nav className="flex flex-col gap-1">
-                    {allNavItems.map((item) => {
-                      const active = isLinkActive(item.href, item.exact)
-                      const Icon = item.icon
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={() => setIsOpen(false)}
-                          className={`relative flex items-center gap-2.5 px-3 py-2 rounded-lg font-medium text-xs transition-all duration-200 ${active
-                            ? 'text-primary font-bold cursor-default'
-                            : 'text-on-surface-variant hover:text-primary hover:bg-surface-container'
-                            }`}
-                        >
-                          <Icon className={`h-4 w-4 stroke-[1.8] ${active ? 'text-primary' : 'text-on-surface-variant/70'}`} />
-                          <span>{item.label}</span>
-                          {active && (
-                            <span className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full bg-primary" />
-                          )}
-                        </Link>
-                      )
-                    })}
-                  </nav>
-                </div>
-
-                <div className="flex flex-col gap-3 pt-3 border-t border-outline-variant/30">
-                  <div className="flex items-center justify-between px-3 py-1.5 rounded-lg border border-outline-variant/30 bg-surface-container-low">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-on-surface-variant">
-                      <Globe className="h-3.5 w-3.5 stroke-[1.8] text-primary" />
-                      <span>{lang === 'vi' ? 'Ngôn ngữ' : 'Language'}</span>
-                    </div>
-                    <LanguageSwitcher currentLang={lang} />
-                  </div>
-
-                  <div className="w-full">
-                    <UserMenu
-                      labels={userMenuLabels}
-                      isLoggingOut={isLoggingOut}
-                      onLogout={handleLogout}
-                    />
-                  </div>
-                </div>
-              </div>
+            <SheetContent
+              side="right"
+              showCloseButton={false}
+              className="w-full max-w-none sm:max-w-none data-[side=right]:w-full data-[side=right]:max-w-none data-[side=right]:sm:max-w-none inset-0 p-0 h-full bg-surface border-none shadow-none transition-all duration-300"
+            >
+              <SheetTitle className="sr-only">Navigation & Account Menu</SheetTitle>
+              <MobileMenuContent
+                user={user}
+                isLoggingOut={isLoggingOut}
+                accountItems={accountItems}
+                navItems={allNavItems}
+                logoutLabel={userMenuLabels.logout}
+                loginLabel={userMenuLabels.login}
+                registerLabel={userMenuLabels.register}
+                lang={lang}
+                isLinkActive={isLinkActive}
+                onClose={() => setIsOpen(false)}
+                onLogout={handleLogout}
+                onLogin={() => dispatch(openLoginModal())}
+                onRegister={() => dispatch(openRegisterModal())}
+              />
             </SheetContent>
           </Sheet>
         </div>
@@ -286,3 +261,4 @@ export default function Header() {
     </header>
   )
 }
+
