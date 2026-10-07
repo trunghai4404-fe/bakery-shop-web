@@ -2,7 +2,7 @@ import { JwtResponse, LoginRequest, LoginResponse, RegisterRequest, User } from 
 import { AppDispatch } from "../../stores";
 import { logOut, setAuth, setAuthFail, setLoading, setUser } from "./authSlice.reducer";
 import { authenticationApi } from "@/actions/auth";
-import { getErrorMessage } from "@/lib/helper";
+import { getErrorMessage, removeTokenAuth } from "@/lib/helper";
 import { openLoginModal } from "./authModal.reducer";
 import { showCustomToast } from "@/components/toast/CustomToast";
 import { BAKERY_ACCESS_TOKEN } from "@/constants/cookies";
@@ -51,15 +51,14 @@ export const logOutUser = () => {
     return async (dispatch: AppDispatch) => {
         dispatch(setLoading(true));
         try {
-            const response = await authenticationApi.logoutApi();
-            if (response.success) {
-                dispatch(logOut());
-            }
+            await authenticationApi.logoutApi();
+        } catch (e) {
+            console.error("Logout API error:", e);
+        } finally {
+            removeTokenAuth();
+            dispatch(logOut());
             dispatch(setLoading(false));
             return true;
-        } catch (e) {
-            dispatch(setLoading(false));
-            return false;
         }
     }
 }

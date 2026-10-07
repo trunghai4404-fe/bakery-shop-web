@@ -25,6 +25,8 @@ import {
   SheetContent,
   SheetTitle,
 } from '@/components/ui/sheet'
+import Image from 'next/image'
+import { appImages } from '@/constants/appInfo'
 
 export default function Header() {
   const locale = useLocale()
@@ -40,7 +42,12 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15)
+      const scrollY = window.scrollY
+      if (scrollY > 50) {
+        setIsScrolled(true)
+      } else if (scrollY < 10) {
+        setIsScrolled(false)
+      }
     }
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -49,9 +56,13 @@ export default function Header() {
 
   const handleLogout = async () => {
     setIsLoggingOut(true)
-    await dispatch(logOutUser())
-    router.replace('/')
-    router.refresh()
+    try {
+      await dispatch(logOutUser())
+    } finally {
+      setIsLoggingOut(false)
+      router.replace('/')
+      router.refresh()
+    }
   }
 
   const userMenuLabels = {
@@ -131,29 +142,32 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full border-b backdrop-blur-md transition-all duration-300 ease-in-out ${isScrolled
-        ? 'border-primary/50 bg-surface/95 shadow-[0_8px_30px_rgba(74,53,51,0.08)]'
-        : 'border-primary/30 bg-surface/85 shadow-[0_4px_20px_rgba(74,53,51,0.04)]'
+      className={`sticky top-0 z-40 w-full border-b backdrop-blur-md transform-gpu transition-colors duration-300 ease-in-out ${isScrolled
+        ? 'border-primary/40 bg-surface/95 shadow-[0_8px_30px_rgba(74,53,51,0.08)]'
+        : 'border-primary/25 bg-surface/85 shadow-[0_4px_20px_rgba(74,53,51,0.04)]'
         }`}
     >
-      <div
-        className={`hidden md:flex mx-auto max-w-7xl items-center justify-between px-4 sm:px-6 relative transition-all duration-300 ease-in-out ${isScrolled ? 'h-15' : 'h-20'
-          }`}
-      >
+      <div className="hidden md:flex mx-auto px-4 lg:px-0 max-w-7xl h-20 items-center justify-between relative">
         <div className="flex items-center gap-5">
           <nav className="flex items-center gap-4">
             {leftNavItems.map(renderNavLink)}
           </nav>
         </div>
 
-        <div className="absolute left-1/2 -translate-x-1/2">
-          <Link href="/" className="flex items-center gap-1.5 group transition-transform duration-200 active:scale-98">
-            <span
-              className={`font-heading font-bold tracking-tight text-primary transition-all duration-300 group-hover:opacity-90 ${isScrolled ? 'text-xl' : 'text-2xl'
+        <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex items-center justify-center z-50 pointer-events-auto">
+          <Link
+            href="/"
+            className="group flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95"
+          >
+            <Image
+              src={appImages.BakeryLogo}
+              alt="Bakery Logo"
+              priority
+              className={`object-contain transition-all duration-300 ease-in-out filter ${isScrolled
+                ? 'h-14 sm:h-20 w-auto translate-y-4 drop-shadow-xs'
+                : 'h-24 sm:h-26 w-auto translate-y-6 sm:translate-y-7 drop-shadow-md'
                 }`}
-            >
-              Bakery<span className="text-secondary">.</span>
-            </span>
+            />
           </Link>
         </div>
 
@@ -184,17 +198,17 @@ export default function Header() {
         </div>
       </div>
 
-      <div
-        className={`flex md:hidden mx-auto items-center justify-between px-4 transition-all duration-300 ease-in-out ${isScrolled ? 'h-[60px]' : 'h-[80px]'
-          }`}
-      >
-        <Link href="/" className="flex items-center gap-1.5 group">
-          <span
-            className={`font-heading font-bold tracking-tight text-primary transition-all duration-300 ${isScrolled ? 'text-lg' : 'text-xl'
-              }`}
-          >
-            Bakery<span className="text-secondary">.</span>
-          </span>
+      <div className="flex md:hidden mx-auto h-16 items-center justify-between px-4">
+        <Link
+          href="/"
+          className="flex items-center gap-1.5 group"
+        >
+          <Image
+            src={appImages.BakeryLogo}
+            alt="Bakery Logo"
+            priority
+            className={`object-contain h-11 w-auto drop-shadow-xs`}
+          />
         </Link>
 
         <div className="flex items-center gap-2">

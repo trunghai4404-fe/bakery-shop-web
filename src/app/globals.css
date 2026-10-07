@@ -194,7 +194,12 @@
     @apply font-sans;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading font-extrabold text-foreground tracking-tight;
   }
 }
@@ -202,4 +207,63 @@
 #nprogress .spinner-icon {
   border-top-color: #A83B55 !important;
   border-left-color: #A83B55 !important;
+}
+
+.container-page {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.container-page {
+  max-width: 1280px;
+}
+
+@media (min-width: 640px) {
+
+  .container-page,
+  .blog-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1279px) {
+  .container-page {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1099px) {
+  .blog-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container-page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@keyframes cardProgressFill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }

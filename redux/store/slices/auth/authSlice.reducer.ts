@@ -1,5 +1,5 @@
 import { LoginResponse, User } from "@/interface/auth";
-import { setCookie, setTokenAuth } from "@/lib/helper";
+import { removeTokenAuth, setCookie, setTokenAuth } from "@/lib/helper";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
@@ -24,6 +24,7 @@ export const authSlice = createSlice({
         setAuthFail: (state) => {
             state.user = null;
             state.loading = false;
+            removeTokenAuth();
         },
         setLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload;
@@ -31,6 +32,7 @@ export const authSlice = createSlice({
         logOut: (state) => {
             state.user = null;
             state.loading = false;
+            removeTokenAuth();
         },
         setUser: (state, action: PayloadAction<User>) => {
             state.user = action.payload;

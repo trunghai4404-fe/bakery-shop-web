@@ -10,7 +10,7 @@ export default function PageContainer({
   const isMortalityPage = pathname.includes('mortality')
   return (
     <div
-      className={`${isMortalityPage ? 'mortality-bg' : ''} page-container min-h-0`}
+      className={`${isMortalityPage ? 'mortality-bg' : ''} container-page min-h-0`}
     >
       {children}
     </div>

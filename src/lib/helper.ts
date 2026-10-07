@@ -32,6 +32,21 @@ export const removeCookie = (name: string) => {
     Cookies.remove(name, { path: "/" });
 };
 
+export const removeTokenAuth = () => {
+    removeCookie(BAKERY_ACCESS_TOKEN);
+    removeCookie(BAKERY_REFRESH_TOKEN);
+    Cookies.remove(BAKERY_ACCESS_TOKEN);
+    Cookies.remove(BAKERY_REFRESH_TOKEN);
+};
+
+export const formatCurrency = (amount?: number): string => {
+    if (amount === undefined || amount === null) return 'Liên hệ';
+    return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    }).format(amount);
+};
+
 export const getErrorMessage = (error: any, fallbackMessage?: string): string => {
     const errorCode =
         error?.errors?.[0]?.code ||
