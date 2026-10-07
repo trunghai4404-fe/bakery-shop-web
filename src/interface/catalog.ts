@@ -27,6 +27,22 @@ export interface ProductCategoryInterface {
     slug: string;
 }
 
+export interface AccessoryProductInterface {
+    accessoryProductId: number;
+    name: string;
+    slug: string;
+    sku: string;
+    price: number;
+    primaryImageUrl: string;
+    defaultQuantity: number;
+    isIncluded: boolean;
+    isMultiSelect: boolean;
+    maxSelectCount?: number | null;
+    isRequired: boolean;
+    sortOrder: number;
+    variants: ProductVariantInterface[];
+}
+
 export interface ProductInterface {
     id: number;
     name: string;
@@ -38,6 +54,7 @@ export interface ProductInterface {
     images: ProductImageInterface[];
     variants: ProductVariantInterface[];
     categories: ProductCategoryInterface[];
+    accessories: AccessoryProductInterface[];
 }
 export type ProductResponse = ListResponse<ProductInterface>
 

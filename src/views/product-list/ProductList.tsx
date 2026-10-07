@@ -11,7 +11,7 @@ import CategorySidebar from './Components/CategorySidebar';
 import ProductListGrid from './Components/ProductListGrid';
 import SortDropdown, { SortOption } from './Components/SortDropdown';
 import AppPagination from '@/components/ui/app-pagination';
-import { Search, LayoutGrid, Filter } from 'lucide-react';
+import { Search, LayoutGrid, Filter, X } from 'lucide-react';
 
 const PAGE_SIZE = 12;
 
@@ -225,7 +225,7 @@ export default function ProductList({ initialCategoryTree = [] }: ProductListPro
         <div className="py-4 sm:py-6 flex flex-col gap-6 w-full">
             <Breadcrumb />
 
-            <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
+            <div className="flex flex-col lg:flex-row gap-4 items-start w-full">
                 <CategorySidebar
                     categoryTree={categoryTree}
                     selectedCategorySlug={categorySlugParam}
@@ -237,11 +237,11 @@ export default function ProductList({ initialCategoryTree = [] }: ProductListPro
                     onMobileOpenChange={setIsMobileSidebarOpen}
                 />
 
-                <div className="flex-1 w-full space-y-6">
+                <div className="flex-1 w-full space-y-4">
                     <div className="relative z-30 bg-surface-container-lowest border border-outline-variant/30 rounded-lg p-4 shadow-2xs space-y-3">
                         <div className="space-y-1.5">
                             <div className="flex items-center justify-between gap-3">
-                                <h1 className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-on-surface">
+                                <h1 className="font-heading text-lg sm:text-3xl font-extrabold tracking-tight text-on-surface">
                                     {headerTitle}
                                 </h1>
 
@@ -261,13 +261,13 @@ export default function ProductList({ initialCategoryTree = [] }: ProductListPro
                         </div>
 
                         <div className="pt-4 border-t border-outline-variant/25 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                            <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-md">
+                            <form onSubmit={handleSearchSubmit} className="relative flex-1 md:max-w-md">
                                 <input
                                     type="text"
                                     value={searchInput}
                                     onChange={(e) => setSearchInput(e.target.value)}
                                     placeholder="Tìm kiếm tên bánh, vị bánh..."
-                                    className="w-full pl-9 pr-4 py-2.5 rounded-lg bg-surface-container-low border border-outline-variant/40 text-xs sm:text-sm text-on-surface placeholder:text-on-surface-variant/60 focus:outline-hidden focus:ring-2 focus:ring-primary/30 transition-all"
+                                    className="w-full pl-9 pr-4 py-2 rounded-lg bg-surface-container-low border border-outline-variant/40 text-xs sm:text-sm text-on-surface placeholder:text-on-surface-variant/60 focus:outline-hidden focus:ring-2 focus:ring-primary/30 transition-all"
                                 />
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-on-surface-variant/60" />
                             </form>
@@ -276,10 +276,29 @@ export default function ProductList({ initialCategoryTree = [] }: ProductListPro
                                 <button
                                     type="button"
                                     onClick={() => setIsMobileSidebarOpen(true)}
-                                    className="lg:hidden flex-1 inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-2xl bg-surface-container-lowest border border-outline-variant/40 text-on-surface font-semibold text-xs sm:text-sm shadow-2xs hover:bg-surface-container-low transition-colors cursor-pointer shrink-0 min-w-35"
+                                    className={`lg:hidden flex-1 inline-flex items-center justify-between gap-2 px-3 py-2 rounded-lg border text-xs sm:text-sm shadow-2xs transition-colors cursor-pointer shrink-0 min-w-35 ${selectedCategory
+                                        ? 'bg-primary/10 border-primary/40 text-primary font-bold'
+                                        : 'bg-surface-container-lowest border-outline-variant/40 text-on-surface font-semibold hover:bg-surface-container-low'
+                                        }`}
                                 >
-                                    <Filter className="h-4 w-4 text-primary shrink-0" />
-                                    <span className="truncate">Danh mục sản phẩm</span>
+                                    <div className="flex items-center gap-1.5 min-w-0 truncate">
+                                        <Filter className="h-4 w-4 text-primary shrink-0" />
+                                        <span className="truncate">{selectedCategory ? selectedCategory.name : 'Danh mục'}</span>
+                                    </div>
+                                    {selectedCategory ? (
+                                        <span
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                updateQueryParams({ category: '' });
+                                            }}
+                                            className="p-0.5 hover:bg-primary/20 rounded-full text-primary transition-colors cursor-pointer shrink-0"
+                                            title="Xóa lọc danh mục"
+                                        >
+                                            <X className="h-3.5 w-3.5" />
+                                        </span>
+                                    ) : null}
                                 </button>
 
                                 <div className="flex-1 sm:flex-none">

@@ -12,9 +12,10 @@ interface SortDropdownProps {
     value: string;
     options: SortOption[];
     onChange: (value: string) => void;
+    className?: string;
 }
 
-export default function SortDropdown({ value, options, onChange }: SortDropdownProps) {
+export default function SortDropdown({ value, options, onChange, className = '' }: SortDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -34,13 +35,13 @@ export default function SortDropdown({ value, options, onChange }: SortDropdownP
     }, []);
 
     return (
-        <div ref={dropdownRef} className="relative inline-block text-left shrink-0 z-40 min-w-40 sm:min-w-45">
+        <div ref={dropdownRef} className={`relative text-left z-40 w-full sm:w-auto inline-block ${className}`}>
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full inline-flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/40 text-xs sm:text-sm font-semibold text-on-surface hover:border-primary/40 focus:outline-hidden focus:ring-2 focus:ring-primary/30 transition-all duration-200 shadow-2xs cursor-pointer"
+                className="w-full inline-flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/40 text-xs sm:text-sm font-semibold text-on-surface hover:border-primary/40 focus:outline-hidden focus:ring-2 focus:ring-primary/30 transition-all duration-200 shadow-2xs cursor-pointer whitespace-nowrap"
             >
-                <div className="flex items-center gap-1.5 truncate">
+                <div className="flex items-center gap-1.5 min-w-0">
                     <ArrowUpDown className="h-3.5 w-3.5 text-primary shrink-0" />
                     <span className="truncate">{selectedOption?.label}</span>
                 </div>
@@ -51,7 +52,7 @@ export default function SortDropdown({ value, options, onChange }: SortDropdownP
             </button>
 
             {isOpen && (
-                <div className="absolute left-0 right-0 mt-1.5 w-full rounded-lg bg-surface-container-lowest border border-outline-variant/30 shadow-xl p-1 z-999 animate-in fade-in zoom-in-95 duration-150 overflow-hidden">
+                <div className="absolute right-0 top-full mt-1.5 min-w-full w-max max-w-70 rounded-lg bg-surface-container-lowest border border-outline-variant/30 shadow-xl p-1 z-999 animate-in fade-in zoom-in-95 duration-150 overflow-hidden">
                     <div className="px-3 py-1.5 text-[11px] font-bold tracking-wider text-on-surface-variant/70 uppercase border-b border-outline-variant/20 mb-1">
                         Sắp xếp theo
                     </div>
@@ -66,12 +67,12 @@ export default function SortDropdown({ value, options, onChange }: SortDropdownP
                                         onChange(option.value);
                                         setIsOpen(false);
                                     }}
-                                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors cursor-pointer ${isSelected
+                                    className={`w-full flex items-center justify-between gap-3 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap ${isSelected
                                         ? 'bg-primary/10 text-primary font-bold'
                                         : 'text-on-surface hover:bg-surface-container-high hover:text-primary'
                                         }`}
                                 >
-                                    <span className="truncate">{option.label}</span>
+                                    <span>{option.label}</span>
                                     {isSelected && <Check className="h-3.5 w-3.5 text-primary shrink-0 stroke-[2.5]" />}
                                 </button>
                             );

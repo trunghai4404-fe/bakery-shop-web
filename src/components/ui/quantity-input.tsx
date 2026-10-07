@@ -4,6 +4,8 @@ import React from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { showCustomToast } from '@/components/toast/CustomToast';
 
+export type QuantityInputSize = 'sm' | 'md' | 'lg';
+
 export interface QuantityInputProps {
     value: number;
     onChange: (value: number) => void;
@@ -12,6 +14,7 @@ export interface QuantityInputProps {
     disabled?: boolean;
     className?: string;
     toastMessage?: string;
+    size?: QuantityInputSize;
 }
 
 export default function QuantityInput({
@@ -22,6 +25,7 @@ export default function QuantityInput({
     disabled = false,
     className = '',
     toastMessage,
+    size = 'md',
 }: QuantityInputProps) {
     const handleDecrease = () => {
         if (disabled || value <= min) return;
@@ -70,16 +74,39 @@ export default function QuantityInput({
         onChange(numVal);
     };
 
+    const sizeClasses = {
+        sm: {
+            container: 'p-0.5',
+            button: 'h-7 w-7 rounded-md',
+            icon: 'h-3 w-3',
+            input: 'w-8 text-xs font-bold',
+        },
+        md: {
+            container: 'p-1',
+            button: 'h-9 w-9 rounded-lg',
+            icon: 'h-4 w-4',
+            input: 'w-12 text-sm font-bold',
+        },
+        lg: {
+            container: 'p-1',
+            button: 'h-10 w-10 rounded-lg',
+            icon: 'h-5 w-5',
+            input: 'w-14 text-base font-bold',
+        },
+    };
+
+    const currentSize = sizeClasses[size] || sizeClasses.md;
+
     return (
-        <div className={`inline-flex items-center rounded-lg bg-surface-container-lowest border border-outline-variant/40 p-1 shadow-2xs ${className}`}>
+        <div className={`inline-flex items-center rounded-lg bg-surface-container-lowest border border-outline-variant/40 shadow-2xs ${currentSize.container} ${className}`}>
             <button
                 type="button"
                 onClick={handleDecrease}
                 disabled={disabled || value <= min}
-                className="h-9 w-9 flex items-center justify-center rounded-lg text-on-surface hover:bg-surface-container-low active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+                className={`${currentSize.button} flex items-center justify-center text-on-surface hover:bg-surface-container-low active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer`}
                 aria-label="Decrease quantity"
             >
-                <Minus className="h-4 w-4 stroke-2" />
+                <Minus className={`${currentSize.icon} stroke-2`} />
             </button>
             <input
                 type="text"
@@ -87,17 +114,18 @@ export default function QuantityInput({
                 value={value}
                 onChange={handleInputChange}
                 disabled={disabled}
-                className="w-12 text-center text-sm font-bold text-on-surface bg-transparent focus:outline-none focus:ring-0 border-none p-0"
+                className={`${currentSize.input} text-center text-on-surface bg-transparent focus:outline-none focus:ring-0 border-none p-0`}
             />
             <button
                 type="button"
                 onClick={handleIncrease}
                 disabled={disabled || value === maxStock}
-                className="h-9 w-9 flex items-center justify-center rounded-lg text-on-surface hover:bg-surface-container-low active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer"
+                className={`${currentSize.button} flex items-center justify-center text-on-surface hover:bg-surface-container-low active:scale-95 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer`}
                 aria-label="Increase quantity"
             >
-                <Plus className="h-4 w-4 stroke-2" />
+                <Plus className={`${currentSize.icon} stroke-2`} />
             </button>
         </div>
     );
 }
+

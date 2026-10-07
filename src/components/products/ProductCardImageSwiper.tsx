@@ -17,7 +17,7 @@ interface ProductCardImageSwiperProps {
     categoryName?: string;
 }
 
-const SLIDE_DURATION = 2200;
+const SLIDE_DURATION = 1500;
 
 export default function ProductCardImageSwiper({
     images = [],
@@ -86,7 +86,7 @@ export default function ProductCardImageSwiper({
 
     if (totalCount === 0) {
         return (
-            <div className="relative aspect-[4/3] w-full bg-surface-container overflow-hidden">
+            <div className="relative aspect-4/3 w-full bg-surface-container overflow-hidden">
                 <div className="flex flex-col items-center justify-center h-full w-full text-on-surface-variant/40">
                     <Cake className="h-10 w-10 stroke-[1.2] mb-1 text-secondary/60" />
                     <span className="text-[11px] font-medium text-on-surface-variant/60">
@@ -104,7 +104,7 @@ export default function ProductCardImageSwiper({
 
     return (
         <div
-            className="relative aspect-[4/3] w-full bg-surface-container-low overflow-hidden group/swiper select-none"
+            className="relative aspect-4/3 w-full bg-surface-container-low overflow-hidden group/swiper select-none"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
@@ -116,9 +116,8 @@ export default function ProductCardImageSwiper({
 
             {hasMultiple && (
                 <div
-                    className={`absolute top-2 left-2.5 right-2.5 z-30 flex gap-1 transition-opacity duration-300 pointer-events-auto ${
-                        isHovered ? 'opacity-100' : 'opacity-0'
-                    }`}
+                    className={`absolute top-2 left-2.5 right-2.5 z-30 flex gap-1 transition-opacity duration-300 pointer-events-auto ${isHovered ? 'opacity-100' : 'opacity-0'
+                        }`}
                 >
                     {validImageUrls.map((_, idx) => {
                         const isCurrent = idx === activeIndex;
@@ -132,17 +131,16 @@ export default function ProductCardImageSwiper({
                                 className="flex-1 py-1.5 -my-1.5 flex items-center cursor-pointer group/segment"
                                 title={`Hình ${idx + 1} / ${totalCount}`}
                             >
-                                <div className="h-[2px] w-full rounded-full bg-black/25 dark:bg-white/30 backdrop-blur-xs overflow-hidden">
+                                <div className="h-0.5 w-full rounded-full bg-black/25 dark:bg-white/30 backdrop-blur-xs overflow-hidden">
                                     <div
                                         key={`${idx}-${activeIndex}-${isHovered}`}
-                                        className={`h-full bg-white shadow-xs rounded-full ${
-                                            isPast ? 'w-full' : isCurrent && !isHovered ? 'w-0' : 'w-0'
-                                        }`}
+                                        className={`h-full bg-white shadow-xs rounded-full ${isPast ? 'w-full' : isCurrent && !isHovered ? 'w-0' : 'w-0'
+                                            }`}
                                         style={
                                             isCurrent && isHovered
                                                 ? {
-                                                      animation: `cardProgressFill ${SLIDE_DURATION}ms linear forwards`,
-                                                  }
+                                                    animation: `cardProgressFill ${SLIDE_DURATION}ms linear forwards`,
+                                                }
                                                 : undefined
                                         }
                                     />

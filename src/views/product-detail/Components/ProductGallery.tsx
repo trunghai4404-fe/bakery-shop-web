@@ -64,7 +64,7 @@ export default function ProductGallery({ images = [], productName }: ProductGall
     return (
         <div className="flex flex-col gap-4 w-full">
             <div className="relative w-full aspect-square rounded-lg bg-surface-container-lowest border border-outline-variant/30 shadow-2xs overflow-hidden group">
-                <AnimatePresence custom={direction} mode="popLayout" initial={false}>
+                <AnimatePresence custom={direction} initial={false}>
                     <motion.div
                         key={activeImage?.id || selectedIndex}
                         custom={direction}
@@ -73,8 +73,8 @@ export default function ProductGallery({ images = [], productName }: ProductGall
                         animate="center"
                         exit="exit"
                         transition={{
-                            x: { type: 'spring', stiffness: 300, damping: 30 },
-                            opacity: { duration: 0.2 },
+                            x: { type: 'tween', ease: [0.25, 1, 0.5, 1], duration: 0.35 },
+                            opacity: { duration: 0.25, ease: 'linear' },
                         }}
                         className="absolute inset-0 w-full h-full"
                     >
@@ -84,7 +84,7 @@ export default function ProductGallery({ images = [], productName }: ProductGall
                             fill
                             priority
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                            className="object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                            className="object-cover object-center"
                         />
                     </motion.div>
                 </AnimatePresence>

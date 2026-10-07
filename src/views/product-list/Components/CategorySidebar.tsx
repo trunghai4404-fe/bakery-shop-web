@@ -110,11 +110,11 @@ export default function CategorySidebar({
 
     const sidebarContent = (
         <div className="space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-outline-variant/30">
+            <div className="flex items-center justify-between pb-2 border-b border-outline-variant/30">
                 <div className="flex items-center gap-2">
                     <Layers className="h-4 w-4 text-primary" />
                     <h3 className="font-heading text-sm font-bold text-on-surface tracking-tight uppercase">
-                        Danh Mục Sản Phẩm
+                        Danh Mục
                     </h3>
                 </div>
                 {isMobileOpen && (
@@ -191,7 +191,7 @@ export default function CategorySidebar({
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-                            className="relative ml-auto w-full max-w-xs bg-surface-container-lowest h-full p-5 shadow-2xl overflow-y-auto flex flex-col z-10"
+                            className="relative ml-auto w-full max-w-xs bg-surface-container-lowest h-full p-4 shadow-2xl overflow-y-auto flex flex-col z-10"
                         >
                             {sidebarContent}
                         </motion.div>
