@@ -1,9 +1,9 @@
-import callApi from "@/apis/handleApi";
+import callApi, { ApiResponse } from "@/apis/handleApi";
 import { ApiRouters } from "@/constants/api-routes";
-import { CategoriesParams, ProductsParams } from "@/interface/catalog";
+import { CategoriesParams, CategoriesResponse, CategoriesTree, ProductResponse, ProductsParams } from "@/interface/catalog";
 
 export const CatalogApi = {
-    getCategories: async (params: CategoriesParams) => {
+    getCategories: async (params: CategoriesParams): Promise<ApiResponse<CategoriesResponse>> => {
         const query = new URLSearchParams()
         if (params.Search) query.append("Search", params.Search.toString())
         if (params.IsActive) query.append("IsActive", params.IsActive.toString())
@@ -17,27 +17,27 @@ export const CatalogApi = {
 
         const url = `${ApiRouters.CATEGORIES}?${query.toString()}`
 
-        return callApi(url)
+        return callApi<CategoriesResponse>(url)
     },
-    getCategoriesTree: async (params: { IsActive: boolean }) => {
+    getCategoriesTree: async (params: { IsActive: boolean }): Promise<ApiResponse<CategoriesTree[]>> => {
         const query = new URLSearchParams()
         query.append("IsActive", params.IsActive.toString())
         const url = `${ApiRouters.CATEGORIES}/tree?${query.toString()}`
-        return callApi(url)
+        return callApi<CategoriesTree[]>(url)
     },
-    getProducts: async (params: ProductsParams) => {
+    getProducts: async (params: ProductsParams): Promise<ApiResponse<ProductResponse>> => {
         const query = new URLSearchParams()
-        if (params.Search) query.append("Search", params.Search.toString())
-        if (params.CategoryId) query.append("CategoryId", params.CategoryId.toString())
-        if (params.CategorySlug) query.append("CategorySlug", params.CategorySlug.toString())
-        if (params.IsActive) query.append("IsActive", params.IsActive.toString())
-        if (params.SortBy) query.append("SortBy", params.SortBy.toString())
-        if (params.IsDescending !== undefined) query.append("IsDescending", params.IsDescending.toString())
-        if (params.Page) query.append("Page", params.Page.toString())
-        if (params.PageSize) query.append("PageSize", params.PageSize.toString())
+        if (params.Search) query.append("search", params.Search.toString())
+        if (params.CategoryId) query.append("categoryId", params.CategoryId.toString())
+        if (params.CategorySlug) query.append("categorySlug", params.CategorySlug.toString())
+        if (params.IsActive !== undefined) query.append("isActive", params.IsActive.toString())
+        if (params.SortBy) query.append("sortBy", params.SortBy.toString())
+        if (params.IsDescending !== undefined) query.append("isDescending", params.IsDescending.toString())
+        if (params.Page) query.append("page", params.Page.toString())
+        if (params.PageSize) query.append("pageSize", params.PageSize.toString())
 
         const url = `${ApiRouters.PRODUCTS}?${query.toString()}`
 
-        return callApi(url)
+        return await callApi<ProductResponse>(url)
     }
 }

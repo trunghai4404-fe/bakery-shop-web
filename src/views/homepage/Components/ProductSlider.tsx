@@ -78,7 +78,7 @@ export default function ProductSlider({ products, loading = false }: ProductSlid
             >
                 {displayProducts.map((product) => (
                     <SwiperSlide key={product.id} className="h-auto">
-                        <ProductCard product={product} />
+                        <ProductCard product={product} showAddToCartText={true} />
                     </SwiperSlide>
                 ))}
             </Swiper>

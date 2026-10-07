@@ -1,5 +1,5 @@
 import axiosClient from './axiosClient';
-interface ApiResponse<T = any> {
+export interface ApiResponse<T = any> {
   meta?: T;
   items?: T;
   success?: T;

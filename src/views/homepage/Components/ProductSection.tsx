@@ -65,9 +65,9 @@ const ProductSection = ({
                 IsActive: true,
                 PageSize: 6,
             })
-                .then((res: any) => {
+                .then((res) => {
                     if (isMounted) {
-                        const items = res?.data?.items
+                        const items = res?.data?.items ?? [];
                         setProducts(items);
                     }
                 })
