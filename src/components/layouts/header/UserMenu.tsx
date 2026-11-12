@@ -31,6 +31,8 @@ import { useRouter } from 'next/navigation'
 interface UserMenuProps {
   labels: {
     profile: string
+    addressBook: string
+    orders: string
     logout: string
     login: string
     register: string

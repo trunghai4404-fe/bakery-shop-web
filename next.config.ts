@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'thuhuongcake.vn',
         pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'pub-91866f49c7d64b69abc96d1f831523dd.r2.dev',
+        pathname: '/**'
       }
 
     ],

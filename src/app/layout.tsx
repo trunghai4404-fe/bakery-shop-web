@@ -63,7 +63,10 @@ export default function RootLayout({
 }>) {
   return (
     <html className={`${jakarta.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans">
+      <body
+        className="min-h-full flex flex-col font-sans"
+        style={{ scrollbarGutter: "stable" }}
+      >
         {children}
       </body>
     </html>

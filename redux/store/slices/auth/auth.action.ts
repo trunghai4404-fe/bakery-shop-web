@@ -1,4 +1,4 @@
-import { JwtResponse, LoginRequest, LoginResponse, RegisterRequest, User } from "@/interface/auth";
+import { JwtResponse, LoginRequest, LoginResponse, RegisterRequest, UpdateProfile, User } from "@/interface/auth";
 import { AppDispatch } from "../../stores";
 import { logOut, setAuth, setAuthFail, setLoading, setUser } from "./authSlice.reducer";
 import { authenticationApi } from "@/actions/auth";
@@ -78,6 +78,23 @@ export const fetchProfile = () => {
             dispatch(logOut());
         } finally {
             dispatch(setLoading(false));
+        }
+    }
+}
+
+export const updateUserProfile = (data: UpdateProfile) => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            const response = await authenticationApi.updateProfile(data);
+            if (response.data) {
+                dispatch(setUser(response.data as User));
+            } else {
+                await dispatch(fetchProfile());
+            }
+            return true;
+        } catch (e) {
+            const errMsg = getErrorMessage(e, "Cập nhật thông tin thất bại.");
+            return Promise.reject(errMsg);
         }
     }
 }

@@ -1,7 +1,7 @@
 import callApi from "@/apis/handleApi";
 import { ApiRouters } from "@/constants/api-routes";
 import { BAKERY_REFRESH_TOKEN } from "@/constants/cookies";
-import { LoginRequest, RegisterRequest } from "@/interface/auth";
+import { LoginRequest, RegisterRequest, UpdateProfile } from "@/interface/auth";
 import Cookies from "js-cookie";
 
 export const authenticationApi = {
@@ -15,6 +15,9 @@ export const authenticationApi = {
     },
     getProfile: async () => {
         return callApi(ApiRouters.ME);
+    },
+    updateProfile: async (payload: UpdateProfile) => {
+        return callApi(ApiRouters.UPDATE_PROFILE, payload, "put");
     },
     logoutApi: async () => {
         const url = `${ApiRouters.AUTH}/logout`;

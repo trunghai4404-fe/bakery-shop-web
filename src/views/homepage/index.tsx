@@ -2,6 +2,7 @@ import { CategoryInterface } from "@/interface/catalog";
 import { BannerResponse } from "@/interface/content";
 import ProductSection from "./Components/ProductSection";
 import Banner from "./Components/Banner";
+import HeroBanner from "./Components/HeroBanner";
 
 interface HomepageProps {
     categories?: CategoryInterface[];
@@ -14,7 +15,7 @@ const Homepage = ({ categories = [], banners = [] }: HomepageProps) => {
 
     return (
         <div className="flex flex-col min-h-screen bg-surface">
-            <Banner banners={safeBanners} />
+            <HeroBanner banners={safeBanners} />
 
             <div className="container-page">
                 {safeCategories.length > 0 && (

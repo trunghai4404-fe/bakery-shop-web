@@ -71,6 +71,8 @@ export default function Header() {
 
   const userMenuLabels = {
     profile: t('profile'),
+    addressBook: t('addressBook'),
+    orders: t('orders'),
     logout: t('logout'),
     login: t('login'),
     register: t('register')

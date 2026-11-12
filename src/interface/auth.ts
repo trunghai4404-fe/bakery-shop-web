@@ -56,6 +56,7 @@ export interface RegisterRequest {
 export interface UpdateProfile {
     fullName?: string;
     phoneNumber?: string;
+    sex?: string;
     gender?: string;
     dateOfBirth?: string;
 }

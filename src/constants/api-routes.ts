@@ -10,5 +10,6 @@ export const ApiRouters = {
     CATEGORIES: `${BASE_URL}/categories`,
     PRODUCTS: `${BASE_URL}/products`,
     CONTENTS: `${BASE_URL}/contents`,
-    BANNERS: `${BASE_URL}/banners`
+    BANNERS: `${BASE_URL}/banners`,
+    LOCATIONS: `${BASE_URL}/locations`,
 }
