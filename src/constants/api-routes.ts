@@ -12,4 +12,9 @@ export const ApiRouters = {
     CONTENTS: `${BASE_URL}/contents`,
     BANNERS: `${BASE_URL}/banners`,
     LOCATIONS: `${BASE_URL}/locations`,
+    STORES: `${BASE_URL}/stores`,
+    BASKET: `${BASE_URL}/basket`,
+    ORDERS: `${BASE_URL}/orders`,
+    PAYMENT_METHODS: `${BASE_URL}/payment-methods`,
+    SHIPPING_METHODS: `${BASE_URL}/shipping-methods`,
 }

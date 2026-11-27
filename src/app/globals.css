@@ -309,3 +309,12 @@
   opacity: 1;
   border-radius: 9999px;
 }
+
+@keyframes fade {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}

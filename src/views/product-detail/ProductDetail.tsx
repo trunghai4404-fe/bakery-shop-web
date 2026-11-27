@@ -7,6 +7,8 @@ import { ProductInterface } from '@/interface/catalog';
 import ProductGallery from './Components/ProductGallery';
 import ProductInfo from './Components/ProductInfo';
 import ProductDescription from './Components/ProductDescription';
+import ConcentricRingsLoader from '@/components/ui/loading-animation-1';
+import { useLoading } from '@/context/LoadingContext';
 
 interface ProductDetailProps {
     product: ProductInterface;
@@ -14,6 +16,11 @@ interface ProductDetailProps {
 
 export default function ProductDetail({ product }: ProductDetailProps) {
     const setCrumb = useBreadcrumbStore((state) => state.setCrumb);
+    const { hideLoading } = useLoading();
+
+    useEffect(() => {
+        hideLoading();
+    }, [hideLoading]);
 
     useEffect(() => {
         if (product) {
@@ -26,8 +33,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
     if (!product) {
         return (
-            <div className="py-16 text-center text-on-surface-variant">
-                Không tìm thấy thông tin sản phẩm.
+            <div className="flex min-h-[65vh] w-full flex-col items-center justify-center py-16">
+                <div className="flex flex-col items-center justify-center rounded-3xl border border-outline-variant/40 bg-surface-container-lowest/90 p-8 shadow-sm backdrop-blur-xs min-w-[240px]">
+                    <ConcentricRingsLoader
+                        size={120}
+                        color="#A83B55"
+                        text="Đang tải thông tin sản phẩm..."
+                        showText={true}
+                    />
+                </div>
             </div>
         );
     }

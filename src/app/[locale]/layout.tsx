@@ -7,6 +7,7 @@ import { LoadingProvider } from "@/context/LoadingContext";
 import NextTopLoader from 'nextjs-toploader';
 import { ToastProvider } from "@/components/toast/ToastProvider";
 import AuthManager from "@/redux/auth/authManager";
+import BasketManager from "@/redux/cart/BasketManager";
 
 export default async function LocaleLayout({
     children,
@@ -37,6 +38,7 @@ export default async function LocaleLayout({
                 />
                 <Providers>
                     <AuthManager />
+                    <BasketManager />
                     {children}
                     <ToastProvider />
                 </Providers>

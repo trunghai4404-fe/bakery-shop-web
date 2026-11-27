@@ -21,7 +21,7 @@ export default function ProfileAvatarCard({ user }: ProfileAvatarCardProps) {
     .toUpperCase();
 
   return (
-    <div className="rounded-2xl bg-linear-to-b from-rose-pale/65 to-surface-container-low border border-outline-variant/30 p-5 flex flex-col items-center text-center">
+    <div className="rounded-xl bg-linear-to-b from-rose-pale/65 to-surface-container-low border border-outline-variant/30 p-4 flex flex-col items-center text-center">
       <Avatar className="h-22 w-22 rounded-2xl ring-4 ring-white shadow-sm mb-3.5">
         <AvatarImage
           src={user.avatar ?? ''}
@@ -37,10 +37,10 @@ export default function ProfileAvatarCard({ user }: ProfileAvatarCardProps) {
         {user.fullName}
       </h3>
 
-      <Badge className="mt-1.5 bg-white/85 text-on-primary-container border border-primary/25 font-semibold">
+      {/* <Badge className="mt-1.5 bg-white/85 text-on-primary-container border border-primary/25 font-semibold">
         <Award className="h-3 w-3 text-primary" />
         <span>{t('memberBadge')}</span>
-      </Badge>
+      </Badge> */}
 
       <div className="w-full mt-5 pt-4 border-t border-outline-variant/25 space-y-2.5 text-left text-xs">
         <div className="flex items-center gap-2 text-on-surface-variant">

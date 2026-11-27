@@ -1,12 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ProductInterface } from '@/interface/catalog';
-import { Link } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 
 import ProductCardImageSwiper from './ProductCardImageSwiper';
 import { formatCurrency } from '@/lib/helper';
+import { showCustomToast } from '@/components/toast/CustomToast';
+import { useAppDispatch } from '@/redux/store/hooks';
+import { addItemsToBasketThunk } from '@/redux/store/slices/cart/cart.action';
 import { ShoppingCartIcon } from 'lucide-react';
+import { useLoading } from '@/context/LoadingContext';
 
 interface ProductCardProps {
     product: ProductInterface;
@@ -14,6 +18,11 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, showAddToCartText = false }: ProductCardProps) {
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+    const { showLoading } = useLoading();
+    const [isAdding, setIsAdding] = useState(false);
+
     const primaryVariant =
         product.variants?.find((v) => v.isActive) || product.variants?.[0];
     const price = primaryVariant?.price;
@@ -21,15 +30,69 @@ export default function ProductCard({ product, showAddToCartText = false }: Prod
     const categoryName = product.categories?.[0]?.name;
     const productUrl = product.slug ? `/product-detail/${product.slug}` : '/product-list';
 
-    const handleAddToCart = (e: React.MouseEvent) => {
+    const handleAddToCart = async (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Thêm vào giỏ hàng (Add to cart):', product);
+
+        if (!primaryVariant || primaryVariant.stockQuantity <= 0) {
+            showCustomToast({
+                message: 'Sản phẩm tạm hết hàng',
+                type: 'error',
+            });
+            return;
+        }
+
+        const hasRequiredAccessories = product.accessories?.some(
+            (acc) => !acc.isIncluded && acc.isRequired && acc.variants && acc.variants.length > 0
+        );
+        if (hasRequiredAccessories) {
+            showCustomToast({
+                message: 'Vui lòng chọn phụ kiện đi kèm cho sản phẩm',
+                type: 'error',
+            });
+            router.push(productUrl);
+            return;
+        }
+
+        if (isAdding) return;
+        setIsAdding(true);
+        try {
+            const result = await dispatch(
+                addItemsToBasketThunk({
+                    items: [
+                        {
+                            productId: product.id,
+                            variantId: primaryVariant.id,
+                            quantity: 1,
+                        },
+                    ],
+                    openDrawer: true,
+                })
+            );
+            if (addItemsToBasketThunk.fulfilled.match(result)) {
+                showCustomToast({
+                    message: 'Đã thêm sản phẩm vào giỏ hàng',
+                    type: 'success',
+                });
+            } else {
+                showCustomToast({
+                    message: result.payload || 'Không thể thêm sản phẩm vào giỏ hàng',
+                    type: 'error',
+                });
+            }
+        } finally {
+            setIsAdding(false);
+        }
     };
 
     return (
         <Link
             href={productUrl}
+            onClick={() => {
+                if (product.slug) {
+                    showLoading();
+                }
+            }}
             className="group relative flex flex-col h-full rounded-lg bg-surface-container-lowest border border-outline-variant/30 shadow-xs hover:border-primary/40 transition-all duration-300 overflow-hidden cursor-pointer"
         >
             <ProductCardImageSwiper
@@ -57,8 +120,10 @@ export default function ProductCard({ product, showAddToCartText = false }: Prod
                     </div>
 
                     <button
+                        type="button"
                         onClick={handleAddToCart}
-                        className={`shrink-0  rounded-lg whitespace-nowrap inline-flex items-center justify-center text-primary bg-primary/10 hover:bg-primary hover:text-white active:scale-95 border border-primary/15 transition-all duration-200 cursor-pointer group/btn shadow-2xs ${showAddToCartText
+                        disabled={isAdding}
+                        className={`shrink-0  rounded-lg whitespace-nowrap inline-flex items-center justify-center text-primary bg-primary/10 hover:bg-primary hover:text-white active:scale-95 border border-primary/15 transition-all duration-200 cursor-pointer group/btn shadow-2xs disabled:opacity-50 ${showAddToCartText
                             ? 'gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-semibold'
                             : 'p-2 sm:p-2.5'
                             }`}

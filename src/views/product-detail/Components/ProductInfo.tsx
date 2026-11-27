@@ -3,8 +3,12 @@
 import React, { useState } from 'react';
 import { ProductInterface, ProductVariantInterface, AccessoryProductInterface } from '@/interface/catalog';
 import { formatCurrency } from '@/lib/helper';
-import { Link } from '@/i18n/routing';
-import { ShoppingCart, Zap, CheckCircle2, ShieldCheck, Truck, Clock, Gift, Check } from 'lucide-react';
+import { Link, useRouter } from '@/i18n/routing';
+import { ROUTES } from '@/constants/routes-path';
+import { BasketItemRequest } from '@/interface/basket';
+import { useAppDispatch } from '@/redux/store/hooks';
+import { addItemsToBasketThunk } from '@/redux/store/slices/cart/cart.action';
+import { Gift, Check } from 'lucide-react';
 import QuantityInput from '@/components/ui/quantity-input';
 import Image from 'next/image';
 import { showCustomToast } from '@/components/toast/CustomToast';
@@ -14,6 +18,8 @@ interface ProductInfoProps {
 }
 
 export default function ProductInfo({ product }: ProductInfoProps) {
+    const router = useRouter();
+    const dispatch = useAppDispatch();
     const activeVariants = product.variants?.filter((v) => v.isActive) || [];
     const defaultVariant = activeVariants[0] || product.variants?.[0];
 
@@ -23,6 +29,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
     const [quantity, setQuantity] = useState<number>(1);
     const [selectedAccessoryVariants, setSelectedAccessoryVariants] = useState<Record<number, number[]>>({});
     const [accessoryQuantities, setAccessoryQuantities] = useState<Record<number, number>>({});
+    const [isSubmittingCart, setIsSubmittingCart] = useState<boolean>(false);
 
     const currentPrice = selectedVariant?.price || 0;
     const currentStock = selectedVariant ? selectedVariant.stockQuantity : 0;
@@ -138,30 +145,79 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         return true;
     };
 
-    const handleAddToCart = () => {
-        if (!validateRequiredAccessories()) return;
+    const buildBasketItems = (): BasketItemRequest[] | null => {
+        if (!selectedVariant) {
+            showCustomToast({
+                message: 'Vui lòng chọn phân loại sản phẩm',
+                type: 'error',
+            });
+            return null;
+        }
+        if (!validateRequiredAccessories()) return null;
 
-        console.log('Thêm vào giỏ:', {
-            productId: product.id,
-            productName: product.name,
-            variant: selectedVariant,
-            quantity,
-            selectedAccessoryVariants,
-            accessoryQuantities,
-        });
+        const items: BasketItemRequest[] = [
+            {
+                productId: product.id,
+                variantId: selectedVariant.id,
+                quantity,
+            },
+        ];
+
+        if (product.accessories && product.accessories.length > 0) {
+            for (const acc of product.accessories) {
+                if (acc.isIncluded) continue;
+
+                const selectedIds = selectedAccessoryVariants[acc.accessoryProductId] || [];
+                const accQty = accessoryQuantities[acc.accessoryProductId] ?? (acc.defaultQuantity || 1);
+
+                if (selectedIds.length > 0) {
+                    for (const variantId of selectedIds) {
+                        items.push({
+                            productId: acc.accessoryProductId,
+                            variantId,
+                            quantity: accQty,
+                        });
+                    }
+                }
+            }
+        }
+
+        return items;
+    };
+
+    const submitBasketAction = async (openDrawer: boolean) => {
+        const items = buildBasketItems();
+        if (!items || isSubmittingCart) return;
+
+        setIsSubmittingCart(true);
+        try {
+            const result = await dispatch(addItemsToBasketThunk({ items, openDrawer }));
+            if (addItemsToBasketThunk.fulfilled.match(result)) {
+                if (openDrawer) {
+                    showCustomToast({
+                        message: 'Đã thêm sản phẩm vào giỏ hàng',
+                        type: 'success',
+                    });
+                } else {
+                    router.push(ROUTES.CHECKOUT);
+                }
+            } else {
+                showCustomToast({
+                    message: result.payload || 'Không thể thêm sản phẩm vào giỏ hàng',
+                    type: 'error',
+                });
+            }
+        } finally {
+            setIsSubmittingCart(false);
+        }
+    };
+
+    const handleAddToCart = () => {
+        void submitBasketAction(true);
     };
 
     const handleBuyNow = () => {
-        if (!validateRequiredAccessories()) return;
-
-        console.log('Mua ngay:', {
-            productId: product.id,
-            productName: product.name,
-            variant: selectedVariant,
-            quantity,
-            selectedAccessoryVariants,
-            accessoryQuantities,
-        });
+        void submitBasketAction(false);
     };
 
     return (
@@ -426,7 +482,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                 <button
                     type="button"
                     onClick={handleAddToCart}
-                    disabled={isOutOfStock}
+                    disabled={isOutOfStock || isSubmittingCart}
                     className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 font-bold text-sm sm:text-base active:scale-98 transition-all cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
                 >
                     <span>Thêm vào giỏ hàng</span>
@@ -435,7 +491,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                 <button
                     type="button"
                     onClick={handleBuyNow}
-                    disabled={isOutOfStock}
+                    disabled={isOutOfStock || isSubmittingCart}
                     className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-primary/85 hover:bg-primary text-white shadow-xs font-bold text-sm sm:text-base active:scale-98 transition-all cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
                 >
                     <span>Mua ngay</span>

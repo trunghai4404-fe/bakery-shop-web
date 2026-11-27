@@ -1,4 +1,5 @@
 import { BAKERY_ACCESS_TOKEN, BAKERY_REFRESH_TOKEN } from "@/constants/cookies";
+import { getOrCreateSessionId } from "@/lib/session";
 import axios from "axios";
 import Cookies from "js-cookie";
 import queryString from "query-string";
@@ -13,11 +14,17 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(async (config: any) => {
   const access_token = Cookies.get(BAKERY_ACCESS_TOKEN);
+  const sessionId = getOrCreateSessionId();
+
   config.headers = {
     Accept: "application/json",
     "Content-Type": "application/json",
     ...config.headers,
   };
+
+  if (sessionId) {
+    config.headers["X-Session-Id"] = sessionId;
+  }
 
   if (access_token) {
     config.headers.Authorization = `Bearer ${access_token}`;

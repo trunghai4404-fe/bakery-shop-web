@@ -2,7 +2,6 @@ import { BAKERY_ACCESS_TOKEN, BAKERY_REFRESH_TOKEN } from "@/constants/cookies";
 import { ERROR_CODE } from "@/constants/errorCodes";
 import { JwtResponse } from "@/interface/auth";
 import Cookies from "js-cookie";
-import { useTranslations } from "next-intl";
 
 export const setCookie = (name: string, value: any, expiresDays: number = 7) => {
     if (typeof window === "undefined") return;
@@ -37,6 +36,43 @@ export const removeTokenAuth = () => {
     removeCookie(BAKERY_REFRESH_TOKEN);
     Cookies.remove(BAKERY_ACCESS_TOKEN);
     Cookies.remove(BAKERY_REFRESH_TOKEN);
+};
+
+export const DATE_FORMAT = {
+    DATE: 'dd/mm/yyyy',
+    DATE_TIME: 'dd/mm/yyyy HH:mm:ss',
+    DATE_HOUR_MINUTE: 'dd/mm/yyyy HH:mm',
+    DATE_MINUTE_SECOND: 'dd/mm/yyyy mm:ss',
+} as const;
+
+export type DateFormatType = (typeof DATE_FORMAT)[keyof typeof DATE_FORMAT];
+
+export const formatTime = (
+    value?: Date | string | number | null,
+    pattern: DateFormatType | string = DATE_FORMAT.DATE_TIME
+): string => {
+    if (value === undefined || value === null || value === '') return '';
+
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) {
+        return typeof value === 'string' ? value : '';
+    }
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const dd = pad(date.getDate());
+    const month = pad(date.getMonth() + 1);
+    const yyyy = String(date.getFullYear());
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    return pattern
+        .replace(/dd\/mm\/yyyy/g, `${dd}/${month}/${yyyy}`)
+        .replace(/dd\/mm/g, `${dd}/${month}`)
+        .replace(/mm\/yyyy/g, `${month}/${yyyy}`)
+        .replace(/HH/g, hours)
+        .replace(/mm/g, minutes)
+        .replace(/ss/g, seconds);
 };
 
 export const formatCurrency = (amount?: number): string => {

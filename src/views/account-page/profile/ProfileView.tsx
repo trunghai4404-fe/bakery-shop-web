@@ -103,15 +103,12 @@ export default function ProfileView({ user }: ProfileViewProps) {
       ?.labelKey ?? 'sexOther';
 
   return (
-    <div className="rounded-3xl border border-primary/15 bg-white p-5 sm:p-7 shadow-[0_4px_24px_rgba(74,53,51,0.05)]">
+    <div className="rounded-xl border border-primary/15 bg-white p-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant/25 pb-5 mb-6">
         <div>
-          <h2 className="font-heading text-xl font-bold text-on-surface">
+          <h2 className="text-base font-bold text-on-surface">
             {t('title')}
           </h2>
-          <p className="text-sm text-on-surface-variant mt-1">
-            {t('description')}
-          </p>
         </div>
 
         {!isEditing && (
@@ -119,7 +116,7 @@ export default function ProfileView({ user }: ProfileViewProps) {
             type="button"
             variant="outline"
             onClick={() => setIsEditing(true)}
-            className="h-9 px-4 rounded-xl border-primary/35 text-primary hover:bg-primary/10 font-bold cursor-pointer self-start sm:self-auto"
+            className="h-8 px-4 rounded-xl border-primary/35 text-primary hover:bg-primary/10 font-bold cursor-pointer self-start sm:self-auto"
           >
             <Pencil className="h-3.5 w-3.5" />
             <span>{t('edit')}</span>
@@ -161,11 +158,10 @@ export default function ProfileView({ user }: ProfileViewProps) {
                   {t('phoneNumber')}
                 </span>
                 <span
-                  className={`text-sm font-semibold ${
-                    user.phoneNumber?.trim()
-                      ? 'text-on-surface'
-                      : 'text-on-surface-variant/70 italic'
-                  }`}
+                  className={`text-sm font-semibold ${user.phoneNumber?.trim()
+                    ? 'text-on-surface'
+                    : 'text-on-surface-variant/70 italic'
+                    }`}
                 >
                   {user.phoneNumber?.trim() || t('notProvided')}
                 </span>
@@ -244,11 +240,10 @@ export default function ProfileView({ user }: ProfileViewProps) {
                         onClick={() =>
                           setValue('sex', option.value, { shouldDirty: true })
                         }
-                        className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all cursor-pointer ${
-                          isSelected
-                            ? 'bg-primary/15 border-primary text-primary'
-                            : 'bg-surface-container-low border-outline-variant/40 text-on-surface-variant hover:border-primary/40'
-                        }`}
+                        className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all cursor-pointer ${isSelected
+                          ? 'bg-primary/15 border-primary text-primary'
+                          : 'bg-surface-container-low border-outline-variant/40 text-on-surface-variant hover:border-primary/40'
+                          }`}
                       >
                         {t(option.labelKey)}
                       </button>

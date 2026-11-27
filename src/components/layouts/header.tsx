@@ -6,10 +6,10 @@ import { useLocale, useTranslations } from 'next-intl'
 import {
   Home,
   Info,
+  PackageSearch,
   PhoneCall,
   ShoppingCart,
   Menu as MenuIcon,
-  Globe,
   Cake
 } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -19,8 +19,10 @@ import UserMenu from './header/UserMenu'
 import MobileMenuContent from './header/UserMenu/MobileMenuContent'
 import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/redux/store/hooks'
+import { openCartDrawer, selectCartTotalQuantity } from '@/redux/store/slices/cart/cartSlice.reducer'
 import { logOutUser } from '@/redux/store/slices/auth/auth.action'
 import { openLoginModal, openRegisterModal } from '@/redux/store/slices/auth/authModal.reducer'
+import { ROUTES } from '@/constants/routes-path'
 import { MENU_ITEMS_CONFIG } from '@/constants/constants'
 import {
   Sheet,
@@ -39,6 +41,7 @@ export default function Header() {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.auth.user)
+  const cartTotalQuantity = useAppSelector(selectCartTotalQuantity)
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
@@ -96,6 +99,12 @@ export default function Header() {
       label: t('products'),
       icon: Cake,
       exact: false
+    },
+    {
+      href: ROUTES.ORDER_TRACKING,
+      label: t('orderTracking'),
+      icon: PackageSearch,
+      exact: false
     }
   ]
 
@@ -124,7 +133,7 @@ export default function Header() {
   }
 
   const handleCartClick = () => {
-    router.push('/product-list')
+    dispatch(openCartDrawer())
   }
 
   const renderNavLink = (item: { href: string; label: string; exact: boolean }) => {
@@ -191,9 +200,14 @@ export default function Header() {
             <button
               onClick={handleCartClick}
               className="relative flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface-container-low/60 hover:bg-primary/10 hover:border-primary/40 transition-all duration-200 text-on-surface-variant hover:text-primary cursor-pointer active:scale-95"
-              title={lang === 'vi' ? 'Sản phẩm / Giỏ hàng' : 'Products / Cart'}
+              title={lang === 'vi' ? 'Giỏ hàng' : 'Cart'}
             >
               <ShoppingCart className="h-4 w-4 stroke-[1.8]" />
+              {cartTotalQuantity > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white shadow-xs">
+                  {cartTotalQuantity > 99 ? '99+' : cartTotalQuantity}
+                </span>
+              )}
             </button>
 
             <UserMenu
@@ -221,10 +235,15 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <button
             onClick={handleCartClick}
-            className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface-container-low text-on-surface-variant cursor-pointer active:scale-95"
+            className="relative flex h-8.5 w-8.5 items-center justify-center rounded-lg border border-outline-variant/40 bg-surface-container-low text-on-surface-variant cursor-pointer active:scale-95"
             title={lang === 'vi' ? 'Giỏ hàng' : 'Cart'}
           >
             <ShoppingCart className="h-4 w-4 stroke-[1.8] text-primary" />
+            {cartTotalQuantity > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white shadow-xs">
+                {cartTotalQuantity > 99 ? '99+' : cartTotalQuantity}
+              </span>
+            )}
           </button>
 
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
